@@ -6,12 +6,13 @@ import { ContentRenderer } from './components/ContentRenderer';
 import { TrueFalseActivity } from './components/TrueFalseActivity';
 import { FreeTextActivity } from './components/FreeTextActivity';
 import { MatchingActivity } from './components/MatchingActivity';
+import { ProgressBar } from './components/ProgressBar';
 import { useProgress } from './hooks/useProgress';
 
 function App() {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { saveActivityProgress, getActivityProgress } = useProgress();
+  const { progress, saveActivityProgress, getActivityProgress, clearProgress } = useProgress();
 
   const activeModule = data.modulos.find(m => m.id === activeModuleId);
 
@@ -71,19 +72,42 @@ function App() {
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Módulos</h2>
             </div>
             
-            {data.modulos.map((modulo) => (
-              <button 
-                key={modulo.id}
-                onClick={() => { setActiveModuleId(modulo.id); setIsSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg transition-colors ${activeModuleId === modulo.id ? 'bg-blue-50 text-acento font-bold' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
-              >
-                <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-bold">
-                  {modulo.numero}
-                </span>
-                <span className="truncate">{modulo.titulo}</span>
-              </button>
-            ))}
+            {data.modulos.map((modulo) => {
+              const moduloCompletado = !!progress[modulo.id];
+              return (
+                <button 
+                  key={modulo.id}
+                  onClick={() => { setActiveModuleId(modulo.id); setIsSidebarOpen(false); }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${activeModuleId === modulo.id ? 'bg-blue-50 text-acento font-bold' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+                >
+                  <div className="flex items-center gap-3 truncate">
+                    <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-bold text-gray-500">
+                      {modulo.numero}
+                    </span>
+                    <span className="truncate">{modulo.titulo}</span>
+                  </div>
+                  {moduloCompletado && (
+                    <span className="text-green-500 text-sm ml-2">✅</span>
+                  )}
+                </button>
+              );
+            })}
           </nav>
+          
+          <div className="mt-8 pt-6 border-t border-gray-100">
+            <ProgressBar progress={progress} totalModules={data.modulos.length} />
+            
+            <button 
+              onClick={() => {
+                if (window.confirm("¿Estás seguro de que quieres borrar todo tu progreso? Esta acción no se puede deshacer.")) {
+                  clearProgress();
+                }
+              }}
+              className="mt-6 w-full text-sm text-red-500 hover:text-red-700 hover:bg-red-50 py-2.5 rounded-lg transition-colors font-semibold border border-transparent hover:border-red-100"
+            >
+              Borrar mis datos
+            </button>
+          </div>
         </div>
       </aside>
 
