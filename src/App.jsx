@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import data from './data/data.json';
+import { ModuleList } from './components/ModuleList';
 import { ModuleCard } from './components/ModuleCard';
 import { ContentRenderer } from './components/ContentRenderer';
 import { TrueFalseActivity } from './components/TrueFalseActivity';
@@ -82,15 +83,10 @@ function App() {
               <h2 className="text-3xl font-bold mb-2 text-gray-800">Bienvenido al curso</h2>
               <p className="text-gray-600 text-lg mb-8">Selecciona un módulo en el menú lateral o en las tarjetas para comenzar tu aprendizaje.</p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {data.modulos.map((modulo) => (
-                  <ModuleCard 
-                    key={modulo.id} 
-                    modulo={modulo} 
-                    onClick={() => setActiveModuleId(modulo.id)} 
-                  />
-                ))}
-              </div>
+              <ModuleList 
+                modules={data.modulos} 
+                onModuleClick={(id) => setActiveModuleId(id)} 
+              />
             </div>
           ) : (
             <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 animate-fade-in mt-4 md:mt-0">

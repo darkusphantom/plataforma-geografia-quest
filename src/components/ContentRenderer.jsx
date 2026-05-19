@@ -1,7 +1,51 @@
-import { useGlossary } from '../hooks/useGlossary';
+import { GlossaryTooltip } from './GlossaryTooltip';
+import data from '../data/data.json';
 
 export function ContentRenderer({ bloques }) {
-  const { renderText } = useGlossary();
+  const glossary = data.glossario;
+
+  // Busca la definición en el JSON
+  const findDefinition = (word) => {
+    const normalize = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const normalizedWord = normalize(word);
+    const term = glossary.find(item => 
+      normalize(item.termino) === normalizedWord || 
+      item.id === normalizedWord
+    );
+    return term ? term.definicion : 'Definición no encontrada.';
+  };
+
+  // Parsea el texto y reemplaza <glossary> con el componente GlossaryTooltip
+  const renderText = (text) => {
+    if (!text) return null;
+    if (typeof text !== 'string') return text;
+    
+    const regex = /<glossary>(.*?)<\/glossary>/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+
+      const word = match[1];
+      const definition = findDefinition(word);
+
+      parts.push(
+        <GlossaryTooltip key={match.index} word={word} definition={definition} />
+      );
+
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts;
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
