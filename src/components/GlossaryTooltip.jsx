@@ -5,7 +5,7 @@ export function GlossaryTooltip({ word, definition }) {
 
   return (
     <span 
-      className="relative inline-block text-acento cursor-help border-b-2 border-dotted border-acento group"
+      className="glossary-term group"
       onClick={(e) => {
         e.stopPropagation();
         setIsActive(!isActive);
@@ -14,12 +14,12 @@ export function GlossaryTooltip({ word, definition }) {
       onMouseLeave={() => setIsActive(false)}
     >
       {word}
-      {/* Tooltip */}
-      <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 sm:w-64 p-3 bg-gray-900 text-white text-sm rounded-lg shadow-xl z-50 transition-all duration-200 pointer-events-none ${isActive ? 'opacity-100 visible -translate-y-1' : 'opacity-0 invisible'}`}>
-        <span className="font-bold block mb-1 text-blue-200 capitalize">{word}</span>
-        {definition}
+      {/* Tooltip tipo etiqueta de museo */}
+      <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 sm:w-80 p-4 bg-[#fdfbf7] border border-amber-900/10 text-textoBase text-sm rounded-xl shadow-2xl z-50 transition-all duration-300 pointer-events-none ${isActive ? 'opacity-100 visible -translate-y-1' : 'opacity-0 invisible'}`}>
+        <span className="font-bold block mb-2 text-acentoSecundario capitalize font-serif text-lg border-b border-amber-900/10 pb-1">{word}</span>
+        <span className="font-medium leading-relaxed block">{definition}</span>
         {/* Flechita inferior */}
-        <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></span>
+        <span className="absolute top-full left-1/2 -translate-x-1/2 border-[8px] border-transparent border-t-[#fdfbf7] drop-shadow-sm"></span>
       </span>
     </span>
   );

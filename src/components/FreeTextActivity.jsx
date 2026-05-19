@@ -55,10 +55,10 @@ export function FreeTextActivity({ questions, onSubmit, savedProgress, onSiguien
   };
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="bg-blue-50/50 p-4 sm:p-6 border-b border-gray-100">
-        <h3 className="text-xl sm:text-2xl font-bold text-textoBase mb-2">Evaluación: Respuesta Libre</h3>
-        <p className="text-gray-600">Escribe tu respuesta con tus propias palabras para cada pregunta.</p>
+    <div className="w-full bg-white/90 backdrop-blur-sm rounded-2xl shadow-md border border-blue-50 overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-50 to-green-50/30 p-4 sm:p-6 border-b border-blue-100">
+        <h3 className="text-2xl sm:text-3xl font-bold text-textoBase mb-2 font-serif">Evaluación: Respuesta Libre</h3>
+        <p className="text-gray-600 font-medium">Escribe tu respuesta con tus propias palabras para cada pregunta.</p>
       </div>
 
       <div className="p-4 sm:p-6 space-y-6">
@@ -67,15 +67,15 @@ export function FreeTextActivity({ questions, onSubmit, savedProgress, onSiguien
           const esCorrecta = resultado && evaluarRespuesta(seleccion, q.respuestasEsperadas).esCorrecta;
 
           return (
-            <div key={q.id} className="p-4 rounded-lg bg-gray-50 border border-gray-100">
-              <p className="font-semibold text-lg text-textoBase mb-4">
+            <div key={q.id} className="p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <p className="font-semibold text-lg text-textoBase mb-4 leading-relaxed">
                 <span className="text-acento mr-2">{index + 1}.</span>
                 {q.pregunta}
               </p>
               
               <textarea
                 rows="3"
-                className={`w-full p-4 rounded-lg border focus:ring-2 focus:ring-acento focus:border-acento outline-none resize-none transition-colors ${resultado ? 'bg-gray-100 cursor-not-allowed' : 'bg-white border-gray-300'}`}
+                className={`w-full p-4 rounded-xl border-2 focus:ring-0 focus:border-acento outline-none resize-none transition-all duration-300 font-medium ${resultado ? 'bg-slate-50 cursor-not-allowed border-slate-200' : 'bg-white border-slate-200 hover:border-slate-300 shadow-inner'}`}
                 placeholder="Escribe tu respuesta aquí..."
                 value={seleccion}
                 onChange={(e) => handleInput(q.id, e.target.value)}
@@ -101,7 +101,7 @@ export function FreeTextActivity({ questions, onSubmit, savedProgress, onSiguien
           <button 
             onClick={handleSubmit}
             disabled={Object.keys(respuestas).length < questions.length || Object.values(respuestas).some(r => r.trim() === '')}
-            className="w-full py-4 bg-acento hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg mt-4"
+            className="w-full py-4 bg-acento hover:bg-sky-600 text-white font-bold rounded-xl shadow-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg mt-4 active:scale-95"
           >
             Evaluar mis respuestas
           </button>

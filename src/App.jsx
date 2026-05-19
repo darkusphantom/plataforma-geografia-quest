@@ -27,11 +27,11 @@ function App() {
   const hasNextModule = activeModuleId ? data.modulos.findIndex(m => m.id === activeModuleId) < data.modulos.length - 1 : false;
 
   return (
-    <div className="min-h-screen bg-fondo text-textoBase font-sans flex flex-col md:flex-row">
+    <div className="min-h-screen bg-fondo text-textoBase font-sans flex flex-col md:flex-row bg-topografico">
       
       {/* Mobile Header */}
-      <header className="md:hidden bg-white shadow-sm p-4 sticky top-0 z-30 flex items-center justify-between">
-        <h1 className="font-bold text-xl text-acento truncate">Geografía 1er Año</h1>
+      <header className="md:hidden bg-white/90 backdrop-blur-sm shadow-sm p-4 sticky top-0 z-30 flex items-center justify-between border-b border-blue-100">
+        <h1 className="font-bold text-xl text-acento truncate font-serif">Geografía 1er Año</h1>
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="text-gray-500 hover:text-acento p-2 focus:outline-none"
@@ -48,14 +48,14 @@ function App() {
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-20 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-20 w-64 bg-white/95 backdrop-blur-md border-r border-gray-200 shadow-xl md:shadow-none transform transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 flex flex-col
         ${isSidebarOpen ? 'translate-x-0 mt-[68px] md:mt-0' : '-translate-x-full'}
       `}>
         <div className="p-6 flex-1 overflow-y-auto">
-          <div className="hidden md:block mb-8">
-            <h1 className="font-bold text-2xl text-acento">Geografía</h1>
-            <p className="text-sm text-gray-500">1er Año</p>
+          <div className="hidden md:block mb-8 pb-4 border-b border-blue-50">
+            <h1 className="font-bold text-3xl text-acento font-serif">Atlas</h1>
+            <p className="text-sm font-bold text-acentoSecundario uppercase tracking-widest mt-1">Geografía 1°</p>
           </div>
           
           <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Navegación</h2>
@@ -125,11 +125,13 @@ function App() {
               />
             </div>
           ) : (
-            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 animate-fade-in mt-4 md:mt-0">
-              <div className="mb-8 border-b pb-6">
-                <span className="text-sm font-bold text-acento tracking-wider uppercase mb-2 block">Módulo {activeModule.numero}</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{activeModule.titulo}</h1>
-                <p className="text-gray-500 mt-2 text-lg">{activeModule.descripcion}</p>
+            <div className="bg-white/90 backdrop-blur-sm p-6 sm:p-10 rounded-2xl shadow-lg border border-blue-50 animate-fade-in mt-4 md:mt-0">
+              <div className="mb-8 border-b-2 border-acento/20 pb-6">
+                <span className="text-sm font-bold text-acentoSecundario tracking-widest uppercase mb-2 block flex items-center gap-2">
+                  <span>🌍</span> Módulo {activeModule.numero}
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 leading-tight font-serif">{activeModule.titulo}</h1>
+                <p className="text-gray-600 mt-3 text-lg font-medium">{activeModule.descripcion}</p>
               </div>
               
               <ContentRenderer bloques={activeModule.contenido.bloques} />
