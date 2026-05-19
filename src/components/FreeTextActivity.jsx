@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { getFeedback } from '../utils/feedback';
+import { evaluarRespuesta } from '../utils/evaluation';
 import { ScoreCard } from './ScoreCard';
 
-export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguiente }) {
-
+export function FreeTextActivity({ questions, onSubmit, savedProgress, onSiguiente }) {
   const [respuestas, setRespuestas] = useState(savedProgress ? savedProgress.respuestas : {});
   const [resultado, setResultado] = useState(savedProgress ? { 
     puntaje: savedProgress.calificacion, 
@@ -12,8 +12,8 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
     ...getFeedback(savedProgress.calificacion) 
   } : null);
 
-  const handleSelect = (id, valor) => {
-    if (resultado) return; // No permitir cambios después de enviar
+  const handleInput = (id, valor) => {
+    if (resultado) return;
     setRespuestas(prev => ({
       ...prev,
       [id]: valor
@@ -21,24 +21,27 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
   };
 
   const handleSubmit = () => {
-    // Verificar si se respondieron todas las preguntas
     if (Object.keys(respuestas).length < questions.length) {
       alert("Por favor, responde todas las preguntas antes de enviar.");
       return;
     }
 
+    let puntosTotales = 0;
     let correctas = 0;
     
     questions.forEach(q => {
-      if (respuestas[q.id] === q.respuestaCorrecta) {
+      const respUsuario = respuestas[q.id] || "";
+      const ev = evaluarRespuesta(respUsuario, q.respuestasEsperadas);
+      if (ev.esCorrecta) {
         correctas++;
+        puntosTotales += q.puntos || (100 / questions.length);
       }
     });
 
-    const puntaje = Math.round((correctas / questions.length) * 100);
+    const puntaje = Math.min(100, Math.round(puntosTotales));
     const feedback = getFeedback(puntaje);
-
     const nuevoResultado = { puntaje, correctas, total: questions.length, ...feedback };
+    
     setResultado(nuevoResultado);
 
     if (onSubmit) {
@@ -54,59 +57,38 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="bg-blue-50/50 p-4 sm:p-6 border-b border-gray-100">
-        <h3 className="text-xl sm:text-2xl font-bold text-textoBase mb-2">Evaluación: Verdadero o Falso</h3>
-        <p className="text-gray-600">Lee cuidadosamente cada afirmación y selecciona la opción correcta.</p>
+        <h3 className="text-xl sm:text-2xl font-bold text-textoBase mb-2">Evaluación: Respuesta Libre</h3>
+        <p className="text-gray-600">Escribe tu respuesta con tus propias palabras para cada pregunta.</p>
       </div>
 
       <div className="p-4 sm:p-6 space-y-6">
         {questions.map((q, index) => {
-          const seleccion = respuestas[q.id];
-          const esCorrecta = resultado && seleccion === q.respuestaCorrecta;
-          const esIncorrecta = resultado && seleccion !== q.respuestaCorrecta;
+          const seleccion = respuestas[q.id] || "";
+          const esCorrecta = resultado && evaluarRespuesta(seleccion, q.respuestasEsperadas).esCorrecta;
 
           return (
             <div key={q.id} className="p-4 rounded-lg bg-gray-50 border border-gray-100">
               <p className="font-semibold text-lg text-textoBase mb-4">
                 <span className="text-acento mr-2">{index + 1}.</span>
-                {q.afirmacion}
+                {q.pregunta}
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => handleSelect(q.id, "verdadero")}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 border-2 
-                    ${seleccion === "verdadero" 
-                      ? 'border-acento bg-blue-50 text-acento' 
-                      : 'border-transparent bg-white text-gray-600 hover:bg-gray-100 shadow-sm'}
-                    ${resultado && q.respuestaCorrecta === "verdadero" ? 'ring-2 ring-exito ring-offset-1' : ''}
-                  `}
-                  disabled={!!resultado}
-                >
-                  Verdadero
-                </button>
-                
-                <button
-                  onClick={() => handleSelect(q.id, "falso")}
-                  className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all duration-200 border-2 
-                    ${seleccion === "falso" 
-                      ? 'border-acento bg-blue-50 text-acento' 
-                      : 'border-transparent bg-white text-gray-600 hover:bg-gray-100 shadow-sm'}
-                    ${resultado && q.respuestaCorrecta === "falso" ? 'ring-2 ring-exito ring-offset-1' : ''}
-                  `}
-                  disabled={!!resultado}
-                >
-                  Falso
-                </button>
-              </div>
+              <textarea
+                rows="3"
+                className={`w-full p-4 rounded-lg border focus:ring-2 focus:ring-acento focus:border-acento outline-none resize-none transition-colors ${resultado ? 'bg-gray-100 cursor-not-allowed' : 'bg-white border-gray-300'}`}
+                placeholder="Escribe tu respuesta aquí..."
+                value={seleccion}
+                onChange={(e) => handleInput(q.id, e.target.value)}
+                disabled={!!resultado}
+              ></textarea>
 
-              {/* Feedback específico por pregunta tras evaluar */}
               {resultado && (
                 <div className={`mt-3 text-sm font-medium ${esCorrecta ? 'text-exito' : 'text-error'}`}>
-                  {esCorrecta ? '✓ Respuesta correcta' : '✗ Respuesta incorrecta'}
-                  {esIncorrecta && q.explicacion && (
+                  {esCorrecta ? '✓ Buen trabajo' : '✗ La respuesta no incluye los conceptos clave esperados.'}
+                  {!esCorrecta && (
                     <p className="text-gray-600 font-normal mt-1 block">
-                      <span className="font-semibold text-gray-700">Explicación: </span>
-                      {q.explicacion}
+                      <span className="font-semibold text-gray-700">Conceptos esperados: </span>
+                      {q.respuestasEsperadas.join(', ')}
                     </p>
                   )}
                 </div>
@@ -115,11 +97,10 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
           );
         })}
 
-        {/* Botón de Enviar o Resultados */}
         {!resultado ? (
           <button 
             onClick={handleSubmit}
-            disabled={Object.keys(respuestas).length < questions.length}
+            disabled={Object.keys(respuestas).length < questions.length || Object.values(respuestas).some(r => r.trim() === '')}
             className="w-full py-4 bg-acento hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg mt-4"
           >
             Evaluar mis respuestas

@@ -4,6 +4,8 @@ import { ModuleList } from './components/ModuleList';
 import { ModuleCard } from './components/ModuleCard';
 import { ContentRenderer } from './components/ContentRenderer';
 import { TrueFalseActivity } from './components/TrueFalseActivity';
+import { FreeTextActivity } from './components/FreeTextActivity';
+import { MatchingActivity } from './components/MatchingActivity';
 import { useProgress } from './hooks/useProgress';
 
 function App() {
@@ -12,6 +14,16 @@ function App() {
   const { saveActivityProgress, getActivityProgress } = useProgress();
 
   const activeModule = data.modulos.find(m => m.id === activeModuleId);
+
+  const handleNextModule = () => {
+    const currentIndex = data.modulos.findIndex(m => m.id === activeModuleId);
+    if (currentIndex < data.modulos.length - 1) {
+      setActiveModuleId(data.modulos[currentIndex + 1].id);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const hasNextModule = activeModuleId ? data.modulos.findIndex(m => m.id === activeModuleId) < data.modulos.length - 1 : false;
 
   return (
     <div className="min-h-screen bg-fondo text-textoBase font-sans flex flex-col md:flex-row">
@@ -99,23 +111,38 @@ function App() {
               <ContentRenderer bloques={activeModule.contenido.bloques} />
               
               <div className="mt-16 pt-8 border-t-2 border-gray-100">
-                {activeModule.actividad && activeModule.actividad.tipo === 'verdadero-falso' ? (
-                  <TrueFalseActivity 
-                    questions={activeModule.actividad.preguntas} 
-                    savedProgress={getActivityProgress(activeModule.id, activeModule.actividad.id)}
-                    onSubmit={({ respuestas, calificacion }) => {
-                      saveActivityProgress(activeModule.id, activeModule.actividad.id, respuestas, calificacion);
-                    }}
-                  />
-                ) : activeModule.actividad ? (
-                  <div className="bg-blue-50 p-8 rounded-xl border border-blue-100 text-center">
-                    <h3 className="text-2xl font-bold text-acento mb-2">Actividad Práctica</h3>
-                    <p className="text-gray-600 mb-6">Pronto podrás completar la actividad "{activeModule.actividad.titulo}" aquí.</p>
-                    <button disabled className="bg-acento text-white px-8 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
-                      Iniciar Actividad
-                    </button>
-                  </div>
-                ) : null}
+                {(() => {
+                  if (!activeModule.actividad) return null;
+                  
+                  const { tipo, id } = activeModule.actividad;
+                  const commonProps = {
+                    savedProgress: getActivityProgress(activeModule.id, id),
+                    onSubmit: ({ respuestas, calificacion, correctas, total }) => {
+                      // Se podría guardar 'correctas' y 'total' en useProgress si se deseara
+                      saveActivityProgress(activeModule.id, id, respuestas, calificacion);
+                    },
+                    onSiguiente: hasNextModule ? handleNextModule : undefined
+                  };
+
+                  switch (tipo) {
+                    case 'verdadero-falso':
+                      return <TrueFalseActivity questions={activeModule.actividad.preguntas} {...commonProps} />;
+                    case 'respuesta-libre':
+                      return <FreeTextActivity questions={activeModule.actividad.preguntas} {...commonProps} />;
+                    case 'matching':
+                      return <MatchingActivity pares={activeModule.actividad.pares} {...commonProps} />;
+                    default:
+                      return (
+                        <div className="bg-blue-50 p-8 rounded-xl border border-blue-100 text-center">
+                          <h3 className="text-2xl font-bold text-acento mb-2">Actividad Práctica</h3>
+                          <p className="text-gray-600 mb-6">La actividad tipo "{tipo}" estará disponible próximamente.</p>
+                          <button disabled className="bg-acento text-white px-8 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
+                            Iniciar Actividad
+                          </button>
+                        </div>
+                      );
+                  }
+                })()}
               </div>
             </div>
           )}
