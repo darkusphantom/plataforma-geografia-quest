@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import data from '../data.json';
+import data from '../data/data.json';
 
 export function useGlossary() {
   const [activeTerm, setActiveTerm] = useState(null);

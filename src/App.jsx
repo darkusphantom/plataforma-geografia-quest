@@ -1,69 +1,108 @@
-import { useState } from 'react'
-import data from './data.json'
-import { ModuleCard } from './components/ModuleCard'
-import { ContentRenderer } from './components/ContentRenderer'
-import { TrueFalseActivity } from './components/TrueFalseActivity'
-import { useProgress } from './hooks/useProgress'
+import { useState } from 'react';
+import data from './data/data.json';
+import { ModuleCard } from './components/ModuleCard';
+import { ContentRenderer } from './components/ContentRenderer';
+import { TrueFalseActivity } from './components/TrueFalseActivity';
+import { useProgress } from './hooks/useProgress';
 
 function App() {
-  const [activeModuleId, setActiveModuleId] = useState(null)
-  const { saveActivityProgress, getActivityProgress } = useProgress()
+  const [activeModuleId, setActiveModuleId] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { saveActivityProgress, getActivityProgress } = useProgress();
 
-  const activeModule = data.modulos.find(m => m.id === activeModuleId)
+  const activeModule = data.modulos.find(m => m.id === activeModuleId);
 
   return (
-    <div className="min-h-screen bg-fondo text-textoBase font-sans flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm p-4 sticky top-0 z-20">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <h1 className="font-bold text-xl sm:text-2xl text-acento truncate pr-4">
-            {activeModule ? activeModule.titulo : "Geografía 1er Año"}
-          </h1>
-          {activeModuleId && (
-            <button 
-              onClick={() => setActiveModuleId(null)}
-              className="text-sm sm:text-base font-medium hover:text-acento transition-colors text-gray-500 whitespace-nowrap bg-gray-50 px-3 py-1.5 rounded-md hover:bg-blue-50"
-            >
-              ← Volver
-            </button>
-          )}
-        </div>
+    <div className="min-h-screen bg-fondo text-textoBase font-sans flex flex-col md:flex-row">
+      
+      {/* Mobile Header */}
+      <header className="md:hidden bg-white shadow-sm p-4 sticky top-0 z-30 flex items-center justify-between">
+        <h1 className="font-bold text-xl text-acento truncate">Geografía 1er Año</h1>
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="text-gray-500 hover:text-acento p-2 focus:outline-none"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isSidebarOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-4xl mx-auto w-full p-4 sm:p-6 flex flex-col gap-6" onClick={() => {
-        // En un caso real, aquí podríamos limpiar el activeTerm del glosario si quisiéramos, 
-        // pero lo manejamos directamente dentro del hook con clics en los elementos.
-      }}>
-        
-        {/* Sidebar / Menu List */}
-        {!activeModuleId && (
-          <div className="w-full flex flex-col gap-4 animate-fade-in">
-            <div className="mb-4">
-              <h2 className="text-3xl font-bold mb-2 text-gray-800">Módulos de Aprendizaje</h2>
-              <p className="text-gray-600 text-lg">Selecciona un módulo para comenzar tu aprendizaje.</p>
+      {/* Sidebar */}
+      <aside className={`
+        fixed inset-y-0 left-0 z-20 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out
+        md:relative md:translate-x-0 flex flex-col
+        ${isSidebarOpen ? 'translate-x-0 mt-[68px] md:mt-0' : '-translate-x-full'}
+      `}>
+        <div className="p-6 flex-1 overflow-y-auto">
+          <div className="hidden md:block mb-8">
+            <h1 className="font-bold text-2xl text-acento">Geografía</h1>
+            <p className="text-sm text-gray-500">1er Año</p>
+          </div>
+          
+          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Navegación</h2>
+          
+          <nav className="space-y-2">
+            <button 
+              onClick={() => { setActiveModuleId(null); setIsSidebarOpen(false); }}
+              className={`w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg transition-colors ${!activeModuleId ? 'bg-blue-50 text-acento font-bold' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+            >
+              <span>🏠</span> Inicio
+            </button>
+            
+            <div className="pt-4 pb-2">
+              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Módulos</h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {data.modulos.map((modulo) => (
-                <ModuleCard 
-                  key={modulo.id} 
-                  modulo={modulo} 
-                  onClick={() => setActiveModuleId(modulo.id)} 
-                />
-              ))}
-            </div>
-          </div>
-        )}
+            {data.modulos.map((modulo) => (
+              <button 
+                key={modulo.id}
+                onClick={() => { setActiveModuleId(modulo.id); setIsSidebarOpen(false); }}
+                className={`w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg transition-colors ${activeModuleId === modulo.id ? 'bg-blue-50 text-acento font-bold' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+              >
+                <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-xs font-bold">
+                  {modulo.numero}
+                </span>
+                <span className="truncate">{modulo.titulo}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      </aside>
 
-        {/* Active Module View */}
-        {activeModule && (
-          <div className="w-full">
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto w-full relative z-0">
+        <div className="max-w-4xl mx-auto">
+          {!activeModuleId ? (
+            <div className="animate-fade-in mt-4 md:mt-0">
+              <h2 className="text-3xl font-bold mb-2 text-gray-800">Bienvenido al curso</h2>
+              <p className="text-gray-600 text-lg mb-8">Selecciona un módulo en el menú lateral o en las tarjetas para comenzar tu aprendizaje.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {data.modulos.map((modulo) => (
+                  <ModuleCard 
+                    key={modulo.id} 
+                    modulo={modulo} 
+                    onClick={() => setActiveModuleId(modulo.id)} 
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-gray-100 animate-fade-in mt-4 md:mt-0">
+              <div className="mb-8 border-b pb-6">
+                <span className="text-sm font-bold text-acento tracking-wider uppercase mb-2 block">Módulo {activeModule.numero}</span>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{activeModule.titulo}</h1>
+                <p className="text-gray-500 mt-2 text-lg">{activeModule.descripcion}</p>
+              </div>
+              
               <ContentRenderer bloques={activeModule.contenido.bloques} />
               
-              {/* Espacio para la actividad evaluativa */}
-              <div className="mt-12 pt-8 border-t-2 border-gray-100">
+              <div className="mt-16 pt-8 border-t-2 border-gray-100">
                 {activeModule.actividad && activeModule.actividad.tipo === 'verdadero-falso' ? (
                   <TrueFalseActivity 
                     questions={activeModule.actividad.preguntas} 
@@ -73,21 +112,29 @@ function App() {
                     }}
                   />
                 ) : activeModule.actividad ? (
-                  <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 text-center">
-                    <h3 className="text-2xl font-bold text-acento mb-2">Actividad: {activeModule.actividad.titulo}</h3>
-                    <p className="text-gray-600 mb-4">Esta actividad tipo "{activeModule.actividad.tipo}" estará disponible próximamente.</p>
-                    <button disabled className="bg-acento text-white px-6 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
+                  <div className="bg-blue-50 p-8 rounded-xl border border-blue-100 text-center">
+                    <h3 className="text-2xl font-bold text-acento mb-2">Actividad Práctica</h3>
+                    <p className="text-gray-600 mb-6">Pronto podrás completar la actividad "{activeModule.actividad.titulo}" aquí.</p>
+                    <button disabled className="bg-acento text-white px-8 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
                       Iniciar Actividad
                     </button>
                   </div>
                 ) : null}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
+
+      {/* Overlay para mobile sidebar */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-gray-900 bg-opacity-50 z-10 md:hidden mt-[68px]"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
