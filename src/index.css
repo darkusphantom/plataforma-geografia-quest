@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glossary-term {
+    @apply text-acento cursor-help border-b-2 border-dotted border-acento relative;
+  }
+}

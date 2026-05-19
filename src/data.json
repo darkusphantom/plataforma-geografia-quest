@@ -1,0 +1,555 @@
+{
+  "proyecto": {
+    "titulo": "Diseño Instruccional Computarizado - Geografía Primer Año",
+    "descripcion": "Plataforma educativa interactiva basada en el modelo CDAVA (Medina, 2005)",
+    "audiencia": "Estudiantes de primer año de educación media general (13-14 años)",
+    "plazo": "7 días",
+    "enfoque": "mobile-first, responsive, accesible"
+  },
+  
+  "glossario": [
+    {
+      "id": "tectonica",
+      "termino": "Tectónica",
+      "definicion": "Rama de la geología que estudia el movimiento y deformación de las placas de la corteza terrestre."
+    },
+    {
+      "id": "litosfera",
+      "termino": "Litosfera",
+      "definicion": "Capa sólida de la Tierra formada por la corteza y la parte superior del manto."
+    },
+    {
+      "id": "astenósfera",
+      "termino": "Astenósfera",
+      "definicion": "Capa del interior de la Tierra situada bajo la litosfera, con propiedades plásticas que permite el movimiento de placas."
+    },
+    {
+      "id": "magma",
+      "termino": "Magma",
+      "definicion": "Materia ígnea en estado fluido en el interior de la Tierra."
+    },
+    {
+      "id": "volcan",
+      "termino": "Volcán",
+      "definicion": "Conducto natural que pone en contacto el exterior con depósitos de magma subterráneo."
+    },
+    {
+      "id": "atmosfera",
+      "termino": "Atmósfera",
+      "definicion": "Envoltura gaseosa que rodea la Tierra y permite la vida sobre el planeta."
+    },
+    {
+      "id": "evaporacion",
+      "termino": "Evaporación",
+      "definicion": "Proceso por el cual el agua líquida se convierte en vapor."
+    },
+    {
+      "id": "precipitacion",
+      "termino": "Precipitación",
+      "definicion": "Caída de agua en forma de lluvia, nieve o granizo desde las nubes."
+    },
+    {
+      "id": "condensacion",
+      "termino": "Condensación",
+      "definicion": "Proceso por el cual el vapor de agua se convierte en agua líquida."
+    },
+    {
+      "id": "rio",
+      "termino": "Río",
+      "definicion": "Corriente permanente y continua de agua que se desplaza sobre la superficie terrestre."
+    },
+    {
+      "id": "caudal",
+      "termino": "Caudal",
+      "definicion": "Cantidad de agua que pasa por un punto dado del cauce en una unidad de tiempo."
+    },
+    {
+      "id": "desembocadura",
+      "termino": "Desembocadura",
+      "definicion": "Lugar donde un río desagua en otro río, lago, océano o mar."
+    },
+    {
+      "id": "clima",
+      "termino": "Clima",
+      "definicion": "Conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo."
+    },
+    {
+      "id": "tiempo",
+      "termino": "Tiempo",
+      "definicion": "Estado actual de la atmósfera en un lugar y momento específico."
+    }
+  ],
+
+  "modulos": [
+    {
+      "id": "1-tectonica-placas",
+      "numero": 1,
+      "titulo": "Tectónica de Placas",
+      "descripcion": "Aprende sobre el movimiento de las placas tectónicas y sus efectos en la Tierra",
+      "orden": 1,
+      "contenido": {
+        "bloques": [
+          {
+            "tipo": "titulo-seccion",
+            "texto": "¿Qué es la Tectónica de Placas?"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "La <glossary>tectónica</glossary> de placas es la teoría científica que explica la estructura y dinámica de la <glossary>litosfera</glossary>. Fue desarrollada por Alfred Wegener, quien incorporó descubrimientos científicos sobre la expansión de los fondos oceánicos y la existencia de relieves submarinos."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Las Placas Tectónicas"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "La corteza terrestre está dividida en grandes bloques llamados placas que se encuentran en constante movimiento dentro de la <glossary>astenósfera</glossary>. El movimiento de estas placas ha separado los continentes a lo largo del tiempo geológico, originando la actual distribución de continentes y océanos."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Tipos de Placas"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Placas continentales: Americana, Africana y Euroasiática",
+              "Placas oceánicas: Pacífico, Índico y Caribe"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Zonas de Convergencia"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Son áreas donde las placas entran en contacto o chocan. En estas zonas, la placa oceánica se hunde bajo la continental, originando grandes sistemas montañosos y cordilleras. También se forman fosas oceánicas, que son relieves submarinos de grandes profundidades."
+          }
+        ]
+      },
+      "actividad": {
+        "id": "act-tectonica-1",
+        "tipo": "respuesta-libre",
+        "titulo": "Evalúa tu Comprensión",
+        "instrucciones": "Responde las siguientes preguntas. Intenta ser lo más preciso posible.",
+        "preguntas": [
+          {
+            "id": "tec-q1",
+            "numero": 1,
+            "pregunta": "¿Por quién fue desarrollada la Teoría de la Tectónica de Placas?",
+            "respuestasEsperadas": [
+              "Alfred Wegener",
+              "Wegener",
+              "Alfred"
+            ],
+            "tipo": "respuesta-corta",
+            "puntos": 33
+          },
+          {
+            "id": "tec-q2",
+            "numero": 2,
+            "pregunta": "¿Cómo se llama la capa del interior de la Tierra donde se mueven las placas?",
+            "respuestasEsperadas": [
+              "astenósfera",
+              "astenosfera"
+            ],
+            "tipo": "respuesta-corta",
+            "puntos": 33
+          },
+          {
+            "id": "tec-q3",
+            "numero": 3,
+            "pregunta": "¿Cuáles son los dos tipos principales de placas tectónicas?",
+            "respuestasEsperadas": [
+              "continentales y oceánicas",
+              "continentales",
+              "oceánicas"
+            ],
+            "tipo": "respuesta-corta",
+            "puntos": 34
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "2-volcanes-sismos",
+      "numero": 2,
+      "titulo": "Volcanes y Movimientos Sísmicos",
+      "descripcion": "Entiende cómo funcionan los volcanes y qué son los terremotos",
+      "orden": 2,
+      "contenido": {
+        "bloques": [
+          {
+            "tipo": "titulo-seccion",
+            "texto": "Los Volcanes"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Un <glossary>volcán</glossary> es un conducto natural que pone en contacto el exterior con depósitos de <glossary>magma</glossary> subterráneo. El <glossary>magma</glossary> es materia ígnea en estado fluido que asciende hasta la superficie terrestre a través de una chimenea."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Partes del Volcán"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Foco ígneo o magmático: Centro de origen del magma",
+              "Chimenea o conducto: Tubo por donde sube el magma",
+              "Cráter principal: Abertura superior del volcán",
+              "Cráteres secundarios: Aperturas adicionales",
+              "Cono volcánico: Estructura acumulada"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Tipos de Erupciones"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Hawaiano: Flujos de lava suave",
+              "Peleano: Erupciones muy violentas",
+              "Vulcaniano: Explosiones moderadas",
+              "Estromboliano: Actividad intermitente"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Movimientos Sísmicos"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Los movimientos sísmicos generalmente se originan por el choque de placas continentales y oceánicas. Estos movimientos vibratorios que presenta la Tierra se llaman sismos o terremotos. Un ejemplo famoso es el terremoto de México en 1985, ocasionado por el choque de la placa norteamericana con la placa de Cocos."
+          }
+        ]
+      },
+      "actividad": {
+        "id": "act-volcanes-1",
+        "tipo": "verdadero-falso",
+        "titulo": "Verdadero o Falso",
+        "instrucciones": "Responde si las siguientes afirmaciones son verdaderas (V) o falsas (F).",
+        "preguntas": [
+          {
+            "id": "vol-q1",
+            "numero": 1,
+            "afirmacion": "El magma es materia ígnea en estado fluido en el interior de la Tierra.",
+            "respuestaCorrecta": "verdadero",
+            "puntos": 33
+          },
+          {
+            "id": "vol-q2",
+            "numero": 2,
+            "afirmacion": "Los volcanes siempre tienen erupción con flujos de lava suave.",
+            "respuestaCorrecta": "falso",
+            "explicacion": "Existen varios tipos de erupciones. Las erupciones peleanas, por ejemplo, son muy violentas.",
+            "puntos": 33
+          },
+          {
+            "id": "vol-q3",
+            "numero": 3,
+            "afirmacion": "Los terremotos son movimientos sísmicos causados principalmente por el choque de placas tectónicas.",
+            "respuestaCorrecta": "verdadero",
+            "puntos": 34
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "3-atmosfera-clima",
+      "numero": 3,
+      "titulo": "Atmósfera y Clima",
+      "descripcion": "Descubre la composición de la atmósfera y cómo se forma el clima",
+      "orden": 3,
+      "contenido": {
+        "bloques": [
+          {
+            "tipo": "titulo-seccion",
+            "texto": "La Atmósfera"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "La <glossary>atmósfera</glossary> es la envoltura gaseosa que rodea a la Tierra y permite la vida sobre el planeta. Está compuesta principalmente por nitrógeno (78%) y oxígeno (21%). La atmósfera nos protege de las peligrosas radiaciones de rayos ultravioletas e infrarrojos emitidos por el sol."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Capas de la Atmósfera"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Tropósfera: La capa más baja donde vivimos",
+              "Estratósfera: Contiene la capa de ozono",
+              "Mesósfera: Donde se queman los meteoritos",
+              "Termósfera: La más caliente",
+              "Exósfera: La capa más externa"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Tiempo vs Clima"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Es importante distinguir entre <glossary>tiempo</glossary> y <glossary>clima</glossary>. El tiempo es el estado actual de la atmósfera en un lugar y momento específico (puede cambiar de un día a otro). El clima es el conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo (años o décadas)."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Elementos del Clima"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Temperatura: Calor de la atmósfera",
+              "Presión atmosférica: Peso del aire",
+              "Vientos: Movimiento del aire",
+              "Humedad atmosférica: Cantidad de vapor de agua",
+              "Precipitación: Caída de agua (lluvia, nieve)"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Factores que Modifican el Clima"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Latitud: Distancia del Ecuador (influye en temperatura)",
+              "Altitud: Altura sobre el nivel del mar",
+              "Distancia al mar: Océanos regulan la temperatura",
+              "Corrientes marinas: Transportan aguas cálidas o frías"
+            ]
+          }
+        ]
+      },
+      "actividad": {
+        "id": "act-atmosfera-1",
+        "tipo": "matching",
+        "titulo": "Relaciona Conceptos",
+        "instrucciones": "Une cada concepto con su definición correcta.",
+        "pares": [
+          {
+            "id": "match-1",
+            "concepto": "Atmósfera",
+            "opciones": [
+              "Envoltura gaseosa que rodea la Tierra",
+              "Estado actual del aire en un momento",
+              "Conjunto de condiciones a largo plazo"
+            ],
+            "respuestaCorrecta": 0,
+            "puntos": 25
+          },
+          {
+            "id": "match-2",
+            "concepto": "Precipitación",
+            "opciones": [
+              "Movimiento del aire",
+              "Caída de agua en forma de lluvia, nieve o granizo",
+              "Cantidad de vapor en el aire"
+            ],
+            "respuestaCorrecta": 1,
+            "puntos": 25
+          },
+          {
+            "id": "match-3",
+            "concepto": "Evaporación",
+            "opciones": [
+              "El agua líquida se convierte en vapor",
+              "El vapor se convierte en agua líquida",
+              "El agua se cae como lluvia"
+            ],
+            "respuestaCorrecta": 0,
+            "puntos": 25
+          },
+          {
+            "id": "match-4",
+            "concepto": "Latitud",
+            "opciones": [
+              "Altura sobre el nivel del mar",
+              "Distancia del Ecuador",
+              "Proximidad al océano"
+            ],
+            "respuestaCorrecta": 1,
+            "puntos": 25
+          }
+        ]
+      }
+    },
+
+    {
+      "id": "4-ciclo-hidrologico",
+      "numero": 4,
+      "titulo": "Ciclo Hidrológico y Recursos Hídricos",
+      "descripcion": "Entiende cómo circula el agua en la Tierra y la importancia de su conservación",
+      "orden": 4,
+      "contenido": {
+        "bloques": [
+          {
+            "tipo": "titulo-seccion",
+            "texto": "El Ciclo Hidrológico"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "El ciclo hidrológico es el proceso de circulación de las aguas que va de los océanos a la atmósfera, de ésta a la superficie terrestre y nuevamente a los océanos, a través de tres procesos principales: <glossary>evaporación</glossary>, <glossary>condensación</glossary> y <glossary>precipitación</glossary>."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Etapas del Ciclo"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Evaporación: El agua de océanos y lagos sube como vapor",
+              "Condensación: El vapor se enfría y forma nubes",
+              "Precipitación: Cae agua en forma de lluvia, nieve o granizo",
+              "Escorrentía: El agua baja hacia ríos y océanos"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Los Ríos"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Un <glossary>río</glossary> es una corriente permanente y continua de agua que se desplaza sobre la superficie de la Tierra. Se origina por la unión de pequeñas corrientes de agua que descienden desde alturas hacia el mar. El <glossary>caudal</glossary> es la cantidad de agua que pasa por un punto del río en una unidad de tiempo."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Partes de un Río"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Nacimiento o fuente: Donde comienza el río",
+              "Curso: El recorrido desde nacimiento a desembocadura",
+              "Cauce: El canal por donde pasan las aguas",
+              "Desembocadura: Lugar donde el río desagua"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Tipos de Desembocadura"
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "Delta: Material depositado forma muchas ramificaciones",
+              "Estuario: Forma de V, profundo y ancho"
+            ]
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Los Lagos"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "Son grandes extensiones de agua dulce o salada que se depositan en depresiones de la corteza terrestre. Los lagos pueden ser glaciares (formados por glaciares), volcánicos (en cráteres) o de barrera (formados por barreras naturales)."
+          },
+          {
+            "tipo": "titulo-subseccion",
+            "texto": "Importancia y Conservación del Agua"
+          },
+          {
+            "tipo": "parrafo",
+            "texto": "El agua es un recurso natural indispensable para la vida. Los grupos humanos utilizan el agua para usos domésticos, agrícolas e industriales. Lamentablemente, el agua está siendo contaminada y agotada. Es fundamental conservar las cuencas hídricas y evitar la contaminación de ríos y lagos."
+          }
+        ]
+      },
+      "actividad": {
+        "id": "act-hidro-1",
+        "tipo": "respuesta-libre",
+        "titulo": "Responde Libremente",
+        "instrucciones": "Responde con tus propias palabras. Sé lo más detallado que puedas.",
+        "preguntas": [
+          {
+            "id": "hidro-q1",
+            "numero": 1,
+            "pregunta": "¿Cuáles son las tres etapas principales del ciclo hidrológico?",
+            "respuestasEsperadas": [
+              "evaporación",
+              "condensación",
+              "precipitación"
+            ],
+            "tipo": "respuesta-larga",
+            "minPalabras": 10,
+            "puntos": 50
+          },
+          {
+            "id": "hidro-q2",
+            "numero": 2,
+            "pregunta": "¿Por qué es importante conservar el agua? Menciona al menos dos razones.",
+            "respuestasEsperadas": [
+              "vida",
+              "humana",
+              "seres vivos",
+              "indispensable",
+              "consumo",
+              "salud"
+            ],
+            "tipo": "respuesta-larga",
+            "minPalabras": 15,
+            "puntos": 50
+          }
+        ]
+      }
+    }
+  ],
+
+  "configuracion": {
+    "colores": {
+      "fondo": "#FFFFFF",
+      "textoBase": "#1F2937",
+      "acento": "#3B82F6",
+      "exito": "#10B981",
+      "advertencia": "#F59E0B",
+      "error": "#EF4444"
+    },
+    "tamanosFont": {
+      "h1": "2rem",
+      "h2": "1.5rem",
+      "h3": "1.25rem",
+      "parrafo": "1rem",
+      "pequeño": "0.875rem"
+    },
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px"
+    }
+  },
+
+  "sistemaPuntuacion": {
+    "escala": "0-100",
+    "aprobacion": 60,
+    "feedback": {
+      "excelente": {
+        "minimo": 80,
+        "emoji": "✅",
+        "mensaje": "¡Excelente! Lo lograste"
+      },
+      "regular": {
+        "minimo": 50,
+        "maximo": 79,
+        "emoji": "😊",
+        "mensaje": "Sigue adelante, lo puedes hacer mejor"
+      },
+      "insuficiente": {
+        "minimo": 0,
+        "maximo": 49,
+        "emoji": "❌",
+        "mensaje": "Intenta de nuevo"
+      }
+    }
+  },
+
+  "requerimientos": {
+    "responsive": true,
+    "almacenamientoLocal": true,
+    "offline": false,
+    "autenticacion": false,
+    "baseDatos": false,
+    "movil_first": true,
+    "accesibilidad": "WCAG 2.1 AA"
+  }
+}
