@@ -7,3 +7,12 @@
     @apply text-acento cursor-help border-b-2 border-dotted border-acento relative;
   }
 }
+
+@theme {
+  --color-fondo: #ffffff;
+  --color-textoBase: #1f2937;
+  --color-acento: #3b82f6;
+  --color-exito: #10b981;
+  --color-advertencia: #f59e0b;
+  --color-error: #ef4444;
+}
