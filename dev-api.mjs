@@ -183,6 +183,29 @@ async function handleGetAnswers(req, res, url) {
   return json(res, 200, { ok: true, answers });
 }
 
+async function handleGetAllStudents(req, res) {
+  // Devuelve todos los estudiantes registrados (sin contraseña)
+  const query = await fetch(`https://api.notion.com/v1/databases/${DB_STUDENTS}/query`, {
+    method: 'POST',
+    headers: notionHeaders(),
+    body: JSON.stringify({ page_size: 100 }),
+  });
+
+  if (!query.ok) {
+    const err = await query.text();
+    console.error('[get-all-students] Notion error:', err);
+    return json(res, 502, { ok: false, error: 'Error al consultar estudiantes.' });
+  }
+
+  const data = await query.json();
+  const students = (data.results ?? []).map((page) => ({
+    pageId: page.id,
+    cedula: page.properties['Cedula']?.title?.[0]?.text?.content ?? '',
+  }));
+
+  return json(res, 200, { ok: true, students });
+}
+
 // ── Server ────────────────────────────────────────────────────────────────────
 
 const server = createServer(async (req, res) => {
@@ -204,6 +227,7 @@ const server = createServer(async (req, res) => {
     if (path === '/api/notion/register' && req.method === 'POST') return await handleRegister(req, res);
     if (path === '/api/notion/save-answer' && req.method === 'POST') return await handleSaveAnswer(req, res);
     if (path === '/api/notion/get-answers' && req.method === 'GET') return await handleGetAnswers(req, res, url);
+    if (path === '/api/notion/get-all-students' && req.method === 'GET') return await handleGetAllStudents(req, res);
 
     json(res, 404, { ok: false, error: `Ruta no encontrada: ${path}` });
   } catch (err) {
@@ -228,5 +252,6 @@ server.listen(PORT, () => {
   console.log(`   POST  /api/notion/login`);
   console.log(`   POST  /api/notion/register`);
   console.log(`   POST  /api/notion/save-answer`);
-  console.log(`   GET   /api/notion/get-answers\n`);
+  console.log(`   GET   /api/notion/get-answers`);
+  console.log(`   GET   /api/notion/get-all-students\n`);
 });

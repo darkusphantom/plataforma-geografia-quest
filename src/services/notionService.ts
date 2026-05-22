@@ -133,3 +133,53 @@ export async function obtenerRespuestasEstudiante(studentPageId: string): Promis
 
   return data.answers ?? [];
 }
+
+// ── Admin ─────────────────────────────────────────────────────────────────────
+
+/** Resumen de estudiante para el panel de admin */
+export interface StudentSummary {
+  pageId: string;
+  cedula: string;
+}
+
+/** Resultado combinado de un estudiante para el dashboard */
+export interface StudentResult extends StudentSummary {
+  answers: NotionAnswer[];
+  /** Puntaje total (suma de puntajes por módulo) */
+  totalScore: number;
+}
+
+/**
+ * Obtiene la lista completa de estudiantes registrados.
+ * Uso exclusivo del panel de administrador.
+ */
+export async function obtenerTodosLosEstudiantes(): Promise<StudentSummary[]> {
+  const res = await fetch(`${BASE}/get-all-students`);
+  const data = await res.json() as { ok: boolean; students?: StudentSummary[]; error?: string };
+  if (!data.ok) throw new Error(data.error ?? 'Error al obtener estudiantes');
+  return data.students ?? [];
+}
+
+/**
+ * Obtiene todas las respuestas de todos los estudiantes.
+ * Realiza una petición paralela por cada estudiante.
+ * Uso exclusivo del panel de administrador.
+ */
+export async function obtenerTodasLasRespuestas(): Promise<StudentResult[]> {
+  const students = await obtenerTodosLosEstudiantes();
+
+  const results = await Promise.all(
+    students.map(async (student) => {
+      try {
+        const answers = await obtenerRespuestasEstudiante(student.pageId);
+        const totalScore = answers.reduce((sum, a) => sum + (a.puntaje ?? 0), 0);
+        return { ...student, answers, totalScore };
+      } catch {
+        return { ...student, answers: [], totalScore: 0 };
+      }
+    })
+  );
+
+  return results;
+}
+

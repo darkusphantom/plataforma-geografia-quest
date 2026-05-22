@@ -12,6 +12,8 @@ import { useAuth } from './hooks/useAuth';
 import { useNotionProgress } from './hooks/useNotionProgress';
 import { LoginPage } from './components/auth/LoginPage';
 import { RegisterPage } from './components/auth/RegisterPage';
+import { AdminLoginPage } from './components/admin/AdminLoginPage';
+import { AdminDashboard } from './components/admin/AdminDashboard';
 
 // ── Guard de autenticación + contenido de la app ──────────────────────────────
 
@@ -25,16 +27,56 @@ function AppContent() {
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  // ── Admin state ────────────────────────────────────────────────────────────
+  const [adminView, setAdminView] = useState('off'); // 'off' | 'login' | 'dashboard'
+
   // useNotionProgress recibe el pageId del estudiante autenticado (null si no hay sesión)
+  // IMPORTANTE: los hooks deben llamarse siempre, antes de cualquier return condicional
   const { progress, saveActivityProgress, getActivityProgress, clearProgress } = useNotionProgress(
     user?.pageId ?? null
   );
 
+  // ── Admin routing (después de todos los hooks) ───────────────────────────────────
+  if (adminView === 'login') {
+    return (
+      <AdminLoginPage
+        onSuccess={() => setAdminView('dashboard')}
+        onBack={() => setAdminView('off')}
+      />
+    );
+  }
+  if (adminView === 'dashboard') {
+    return <AdminDashboard onLogout={() => setAdminView('off')} />;
+  }
+
   // ── Guard ────────────────────────────────────────────────────────────────────
   if (!user) {
     return authMode === 'login'
-      ? <LoginPage onToggle={() => setAuthMode('register')} />
-      : <RegisterPage onToggle={() => setAuthMode('login')} />;
+      ? (
+        <div className="relative">
+          <LoginPage onToggle={() => setAuthMode('register')} />
+          {/* Enlace discreto de acceso admin */}
+          <button
+            id="go-to-admin"
+            onClick={() => setAdminView('login')}
+            className="fixed bottom-4 right-4 text-xs text-gray-400 hover:text-gray-600 transition-colors font-medium bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-200 hover:border-gray-300"
+          >
+            🔒 Acceso Admin
+          </button>
+        </div>
+      )
+      : (
+        <div className="relative">
+          <RegisterPage onToggle={() => setAuthMode('login')} />
+          <button
+            id="go-to-admin-register"
+            onClick={() => setAdminView('login')}
+            className="fixed bottom-4 right-4 text-xs text-gray-400 hover:text-gray-600 transition-colors font-medium bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-200 hover:border-gray-300"
+          >
+            🔒 Acceso Admin
+          </button>
+        </div>
+      );
   }
 
   // ── App principal ─────────────────────────────────────────────────────────────
