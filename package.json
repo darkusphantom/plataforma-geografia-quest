@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node --env-file=.env dev-api.mjs",
+    "dev:full": "npx concurrently \"pnpm dev:api\" \"pnpm dev\" --names \"api,vite\" --prefix-colors \"cyan,blue\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -18,6 +20,7 @@
     "@tailwindcss/postcss": "^4.3.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vercel/node": "^5.8.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.3.0",
@@ -26,6 +29,7 @@
     "globals": "^17.6.0",
     "postcss": "^8.5.14",
     "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
     "vite": "^8.0.12"
   }
 }

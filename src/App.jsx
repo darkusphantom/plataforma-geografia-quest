@@ -7,13 +7,37 @@ import { TrueFalseActivity } from './components/TrueFalseActivity';
 import { FreeTextActivity } from './components/FreeTextActivity';
 import { MatchingActivity } from './components/MatchingActivity';
 import { ProgressBar } from './components/ProgressBar';
-import { useProgress } from './hooks/useProgress';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
+import { useNotionProgress } from './hooks/useNotionProgress';
+import { LoginPage } from './components/auth/LoginPage';
+import { RegisterPage } from './components/auth/RegisterPage';
 
-function App() {
+// ── Guard de autenticación + contenido de la app ──────────────────────────────
+
+/**
+ * Componente interno que requiere autenticación.
+ * Muestra Login/Register si no hay sesión, y la plataforma si la hay.
+ */
+function AppContent() {
+  const { user, logout } = useAuth();
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
   const [activeModuleId, setActiveModuleId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { progress, saveActivityProgress, getActivityProgress, clearProgress } = useProgress();
 
+  // useNotionProgress recibe el pageId del estudiante autenticado (null si no hay sesión)
+  const { progress, saveActivityProgress, getActivityProgress, clearProgress } = useNotionProgress(
+    user?.pageId ?? null
+  );
+
+  // ── Guard ────────────────────────────────────────────────────────────────────
+  if (!user) {
+    return authMode === 'login'
+      ? <LoginPage onToggle={() => setAuthMode('register')} />
+      : <RegisterPage onToggle={() => setAuthMode('login')} />;
+  }
+
+  // ── App principal ─────────────────────────────────────────────────────────────
   const activeModule = data.modulos.find(m => m.id === activeModuleId);
 
   const handleNextModule = () => {
@@ -57,6 +81,15 @@ function App() {
             <h1 className="font-bold text-3xl text-acento font-serif">Atlas</h1>
             <p className="text-sm font-bold text-acentoSecundario uppercase tracking-widest mt-1">Geografía 1°</p>
           </div>
+
+          {/* Info del estudiante autenticado */}
+          <div className="mb-4 px-3 py-2.5 bg-blue-50 rounded-xl flex items-center gap-2">
+            <span className="text-blue-500">👤</span>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-500 font-medium">Estudiante</p>
+              <p className="text-sm font-bold text-gray-800 truncate">{user.cedula}</p>
+            </div>
+          </div>
           
           <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Navegación</h2>
           
@@ -94,7 +127,7 @@ function App() {
             })}
           </nav>
           
-          <div className="mt-8 pt-6 border-t border-gray-100">
+          <div className="mt-8 pt-6 border-t border-gray-100 space-y-2">
             <ProgressBar progress={progress} totalModules={data.modulos.length} />
             
             <button 
@@ -106,6 +139,17 @@ function App() {
               className="mt-6 w-full text-sm text-red-500 hover:text-red-700 hover:bg-red-50 py-2.5 rounded-lg transition-colors font-semibold border border-transparent hover:border-red-100"
             >
               Borrar mis datos
+            </button>
+
+            {/* Cerrar sesión */}
+            <button
+              id="logout-btn"
+              onClick={() => {
+                if (window.confirm("¿Cerrar sesión?")) logout();
+              }}
+              className="w-full text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 py-2.5 rounded-lg transition-colors font-semibold border border-transparent hover:border-gray-100 flex items-center justify-center gap-2"
+            >
+              <span>🚪</span> Cerrar sesión
             </button>
           </div>
         </div>
@@ -144,7 +188,7 @@ function App() {
                   const commonProps = {
                     savedProgress: getActivityProgress(activeModule.id, id),
                     onSubmit: ({ respuestas, calificacion, correctas, total }) => {
-                      // Se podría guardar 'correctas' y 'total' en useProgress si se deseara
+                      // Se podría guardar 'correctas' y 'total' en useNotionProgress si se deseara
                       saveActivityProgress(activeModule.id, id, respuestas, calificacion);
                     },
                     onSiguiente: hasNextModule ? handleNextModule : undefined
@@ -183,6 +227,16 @@ function App() {
         ></div>
       )}
     </div>
+  );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
