@@ -2,11 +2,5 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
-  ],
-  "env": {
-    "NOTION_KEY": "@notion_key",
-    "NOTION_VERSION": "2022-06-28",
-    "NOTION_DB_STUDENTS": "367408ab-be2a-8196-9e19-ddc57ff85c93",
-    "NOTION_DB_ANSWERS": "367408ab-be2a-8194-8f10-ea98f58dba7c"
-  }
+  ]
 }
