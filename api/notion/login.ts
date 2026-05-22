@@ -24,9 +24,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ ok: false, error: 'Cédula y contraseña son requeridas.' });
   }
 
-  const NOTION_KEY = process.env.NOTION_KEY!;
+  const NOTION_KEY = process.env.NOTION_KEY;
   const NOTION_VERSION = process.env.NOTION_VERSION ?? '2022-06-28';
-  const DB_ID = process.env.NOTION_DB_STUDENTS!;
+  const DB_ID = process.env.NOTION_DB_STUDENTS;
+
+  if (!NOTION_KEY || !DB_ID) {
+    console.error('[login] Faltan variables de entorno: NOTION_KEY o NOTION_DB_STUDENTS');
+    return res.status(500).json({ ok: false, error: 'Configuración del servidor incompleta.' });
+  }
 
   // Buscar estudiante por cédula en Notion
   const queryRes = await fetch(`https://api.notion.com/v1/databases/${DB_ID}/query`, {

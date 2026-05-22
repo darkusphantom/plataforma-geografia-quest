@@ -28,9 +28,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ ok: false, error: 'La contraseña debe tener al menos 4 caracteres.' });
   }
 
-  const NOTION_KEY = process.env.NOTION_KEY!;
+  const NOTION_KEY = process.env.NOTION_KEY;
   const NOTION_VERSION = process.env.NOTION_VERSION ?? '2022-06-28';
-  const DB_ID = process.env.NOTION_DB_STUDENTS!;
+  const DB_ID = process.env.NOTION_DB_STUDENTS;
+
+  if (!NOTION_KEY || !DB_ID) {
+    console.error('[register] Faltan variables de entorno: NOTION_KEY o NOTION_DB_STUDENTS');
+    return res.status(500).json({ ok: false, error: 'Configuración del servidor incompleta.' });
+  }
+
   const HEADERS = {
     Authorization: `Bearer ${NOTION_KEY}`,
     'Content-Type': 'application/json',

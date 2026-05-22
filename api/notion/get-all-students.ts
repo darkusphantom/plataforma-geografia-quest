@@ -15,9 +15,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Método no permitido' });
 
-  const NOTION_KEY = process.env.NOTION_KEY!;
+  const NOTION_KEY = process.env.NOTION_KEY;
   const NOTION_VERSION = process.env.NOTION_VERSION ?? '2022-06-28';
-  const DB_ID = process.env.NOTION_DB_STUDENTS!;
+  const DB_ID = process.env.NOTION_DB_STUDENTS;
+
+  if (!NOTION_KEY || !DB_ID) {
+    console.error('[get-all-students] Faltan variables de entorno');
+    return res.status(500).json({ ok: false, error: 'Configuración del servidor incompleta.' });
+  }
 
   const queryRes = await fetch(`https://api.notion.com/v1/databases/${DB_ID}/query`, {
     method: 'POST',
