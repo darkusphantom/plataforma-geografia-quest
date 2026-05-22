@@ -5,11 +5,11 @@ import { ScoreCard } from './ScoreCard';
 export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguiente }) {
 
   const [respuestas, setRespuestas] = useState(savedProgress ? savedProgress.respuestas : {});
-  const [resultado, setResultado] = useState(savedProgress ? { 
-    puntaje: savedProgress.calificacion, 
+  const [resultado, setResultado] = useState(savedProgress ? {
+    puntaje: savedProgress.calificacion,
     correctas: savedProgress.correctas,
     total: questions.length,
-    ...getFeedback(savedProgress.calificacion) 
+    ...getFeedback(savedProgress.calificacion)
   } : null);
 
   const handleSelect = (id, valor) => {
@@ -28,7 +28,7 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
     }
 
     let correctas = 0;
-    
+
     questions.forEach(q => {
       if (respuestas[q.id] === q.respuestaCorrecta) {
         correctas++;
@@ -68,15 +68,15 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
             <div key={q.id} className="p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300">
               <p className="font-semibold text-lg text-textoBase mb-5 leading-relaxed">
                 <span className="text-acento mr-2">{index + 1}.</span>
-                {q.pregunta}
+                {q.afirmacion}
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => handleSelect(q.id, "verdadero")}
                   className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all duration-300 border-2 active:scale-95
-                    ${seleccion === "verdadero" 
-                      ? 'border-acento bg-blue-50 text-acento shadow-inner' 
+                    ${seleccion === "verdadero"
+                      ? 'border-acento bg-blue-50 text-acento shadow-inner'
                       : 'border-slate-200 bg-white text-gray-600 hover:bg-slate-50 hover:border-slate-300 shadow-sm'}
                     ${resultado && q.respuestaCorrecta === "verdadero" ? 'ring-2 ring-exito ring-offset-2 border-exito' : ''}
                   `}
@@ -84,12 +84,12 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
                 >
                   Verdadero
                 </button>
-                
+
                 <button
                   onClick={() => handleSelect(q.id, "falso")}
                   className={`flex-1 py-3 px-4 rounded-xl font-bold transition-all duration-300 border-2 active:scale-95
-                    ${seleccion === "falso" 
-                      ? 'border-acento bg-blue-50 text-acento shadow-inner' 
+                    ${seleccion === "falso"
+                      ? 'border-acento bg-blue-50 text-acento shadow-inner'
                       : 'border-slate-200 bg-white text-gray-600 hover:bg-slate-50 hover:border-slate-300 shadow-sm'}
                     ${resultado && q.respuestaCorrecta === "falso" ? 'ring-2 ring-exito ring-offset-2 border-exito' : ''}
                   `}
@@ -117,7 +117,7 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
 
         {/* Botón de Enviar o Resultados */}
         {!resultado ? (
-          <button 
+          <button
             onClick={handleSubmit}
             disabled={Object.keys(respuestas).length < questions.length}
             className="w-full py-4 bg-acento hover:bg-sky-600 text-white font-bold rounded-xl shadow-md transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg mt-4 active:scale-95"
@@ -125,7 +125,7 @@ export function TrueFalseActivity({ questions, onSubmit, savedProgress, onSiguie
             Evaluar mis respuestas
           </button>
         ) : (
-          <ScoreCard 
+          <ScoreCard
             calificacion={resultado.puntaje}
             totalPreguntas={resultado.total}
             respuestasCorrectas={resultado.correctas}
