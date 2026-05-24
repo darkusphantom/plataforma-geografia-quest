@@ -1,19 +1,30 @@
 import { getFeedback } from '../utils/feedback';
 
+/**
+ * Tarjeta de calificación final mostrada al completar una actividad.
+ *
+ * @param {number} calificacion - Puntaje obtenido (escala del módulo, p. ej. 0–5).
+ * @param {number} [puntajeMaximo=5] - Puntaje máximo posible del módulo.
+ * @param {number} totalPreguntas - Total de preguntas de la actividad.
+ * @param {number} respuestasCorrectas - Número de respuestas correctas.
+ * @param {Function} onRepetir - Callback para reintentar la actividad.
+ * @param {Function} [onSiguiente] - Callback para avanzar al siguiente módulo.
+ */
 export function ScoreCard({ 
   calificacion, 
+  puntajeMaximo = 5,
   totalPreguntas, 
   respuestasCorrectas, 
   onRepetir, 
   onSiguiente 
 }) {
-  const feedback = getFeedback(calificacion);
+  const feedback = getFeedback(calificacion, puntajeMaximo);
 
   return (
     <div className={`mt-6 p-6 sm:p-8 rounded-xl border-2 text-center animate-fade-in shadow-sm ${feedback.color}`}>
       <div className="text-6xl sm:text-7xl mb-4">{feedback.emoji}</div>
       <h4 className="text-3xl sm:text-4xl font-extrabold mb-2 text-gray-900 drop-shadow-sm">
-        {calificacion}/100
+        {parseFloat(calificacion.toFixed(2))}/{puntajeMaximo} <span className="text-lg font-semibold text-gray-500">pts</span>
       </h4>
       
       {totalPreguntas !== undefined && respuestasCorrectas !== undefined && (

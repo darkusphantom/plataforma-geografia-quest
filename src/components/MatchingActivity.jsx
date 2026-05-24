@@ -31,11 +31,11 @@ export function MatchingActivity({ pares, onSubmit, savedProgress, onSiguiente }
     pares.forEach(p => {
       if (respuestas[p.id] === p.respuestaCorrecta) {
         correctas++;
-        puntosTotales += p.puntos || (100 / pares.length);
+        puntosTotales += p.puntos ?? (5 / pares.length);
       }
     });
 
-    const puntaje = Math.min(100, Math.round(puntosTotales));
+    const puntaje = parseFloat(Math.min(5, puntosTotales).toFixed(2));
     const feedback = getFeedback(puntaje);
     const nuevoResultado = { puntaje, correctas, total: pares.length, ...feedback };
     

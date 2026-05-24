@@ -142,7 +142,7 @@
               "Alfred"
             ],
             "tipo": "respuesta-corta",
-            "puntos": 33
+            "puntos": 1.67
           },
           {
             "id": "tec-q2",
@@ -153,7 +153,7 @@
               "astenosfera"
             ],
             "tipo": "respuesta-corta",
-            "puntos": 33
+            "puntos": 1.67
           },
           {
             "id": "tec-q3",
@@ -165,7 +165,7 @@
               "oceánicas"
             ],
             "tipo": "respuesta-corta",
-            "puntos": 34
+            "puntos": 1.66
           }
         ]
       }
@@ -235,7 +235,7 @@
             "numero": 1,
             "afirmacion": "El magma es materia ígnea en estado fluido en el interior de la Tierra.",
             "respuestaCorrecta": "verdadero",
-            "puntos": 33
+            "puntos": 1.67
           },
           {
             "id": "vol-q2",
@@ -243,14 +243,14 @@
             "afirmacion": "Los volcanes siempre tienen erupción con flujos de lava suave.",
             "respuestaCorrecta": "falso",
             "explicacion": "Existen varios tipos de erupciones. Las erupciones peleanas, por ejemplo, son muy violentas.",
-            "puntos": 33
+            "puntos": 1.67
           },
           {
             "id": "vol-q3",
             "numero": 3,
             "afirmacion": "Los terremotos son movimientos sísmicos causados principalmente por el choque de placas tectónicas.",
             "respuestaCorrecta": "verdadero",
-            "puntos": 34
+            "puntos": 1.66
           }
         ]
       }
@@ -338,7 +338,7 @@
               "Conjunto de condiciones a largo plazo"
             ],
             "respuestaCorrecta": 0,
-            "puntos": 25
+            "puntos": 1.25
           },
           {
             "id": "match-2",
@@ -349,7 +349,7 @@
               "Cantidad de vapor en el aire"
             ],
             "respuestaCorrecta": 1,
-            "puntos": 25
+            "puntos": 1.25
           },
           {
             "id": "match-3",
@@ -360,7 +360,7 @@
               "El agua se cae como lluvia"
             ],
             "respuestaCorrecta": 0,
-            "puntos": 25
+            "puntos": 1.25
           },
           {
             "id": "match-4",
@@ -371,7 +371,7 @@
               "Proximidad al océano"
             ],
             "respuestaCorrecta": 1,
-            "puntos": 25
+            "puntos": 1.25
           }
         ]
       }
@@ -473,7 +473,7 @@
             ],
             "tipo": "respuesta-larga",
             "minPalabras": 10,
-            "puntos": 50
+            "puntos": 2.5
           },
           {
             "id": "hidro-q2",
@@ -489,7 +489,7 @@
             ],
             "tipo": "respuesta-larga",
             "minPalabras": 15,
-            "puntos": 50
+            "puntos": 2.5
           }
         ]
       }
@@ -520,23 +520,26 @@
   },
 
   "sistemaPuntuacion": {
-    "escala": "0-100",
-    "aprobacion": 60,
+    "escala": "0-20",
+    "puntosPorModulo": 5,
+    "totalModulos": 4,
+    "aprobacionPorcentaje": 60,
+    "aprobacionPorModulo": 3,
     "feedback": {
       "excelente": {
-        "minimo": 80,
+        "porcentajeMinimo": 80,
         "emoji": "✅",
         "mensaje": "¡Excelente! Lo lograste"
       },
       "regular": {
-        "minimo": 50,
-        "maximo": 79,
+        "porcentajeMinimo": 50,
+        "porcentajeMaximo": 79,
         "emoji": "😊",
         "mensaje": "Sigue adelante, lo puedes hacer mejor"
       },
       "insuficiente": {
-        "minimo": 0,
-        "maximo": 49,
+        "porcentajeMinimo": 0,
+        "porcentajeMaximo": 49,
         "emoji": "❌",
         "mensaje": "Intenta de nuevo"
       }

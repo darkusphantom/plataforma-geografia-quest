@@ -34,11 +34,11 @@ export function FreeTextActivity({ questions, onSubmit, savedProgress, onSiguien
       const ev = evaluarRespuesta(respUsuario, q.respuestasEsperadas);
       if (ev.esCorrecta) {
         correctas++;
-        puntosTotales += q.puntos || (100 / questions.length);
+        puntosTotales += q.puntos ?? (5 / questions.length);
       }
     });
 
-    const puntaje = Math.min(100, Math.round(puntosTotales));
+    const puntaje = parseFloat(Math.min(5, puntosTotales).toFixed(2));
     const feedback = getFeedback(puntaje);
     const nuevoResultado = { puntaje, correctas, total: questions.length, ...feedback };
     
