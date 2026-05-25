@@ -253,7 +253,22 @@
             "puntos": 1.66
           }
         ]
-      }
+      },
+      "actividades": [
+        {
+          "tipo": "crossword",
+          "id": "act-crossword-volcanes",
+          "titulo": "Crucigrama Volcánico",
+          "instruccion": "Completa el crucigrama con los conceptos aprendidos sobre volcanes.",
+          "palabras": [
+            { "id": "1", "palabra": "CHIMENEA", "pista": "Tubo por donde sube el magma.", "fila": 0, "col": 5, "direccion": "abajo" },
+            { "id": "2", "palabra": "MAGMA", "pista": "Materia ígnea en estado fluido.", "fila": 3, "col": 5, "direccion": "derecha" },
+            { "id": "3", "palabra": "CRATER", "pista": "Abertura superior del volcán.", "fila": 6, "col": 1, "direccion": "derecha" },
+            { "id": "4", "palabra": "CONO", "pista": "Estructura acumulada del volcán.", "fila": 6, "col": 1, "direccion": "abajo" },
+            { "id": "5", "palabra": "FOCO", "pista": "Centro de origen del magma.", "fila": 9, "col": 0, "direccion": "derecha" }
+          ]
+        }
+      ]
     },
 
     {

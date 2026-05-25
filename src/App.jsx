@@ -7,6 +7,7 @@ import { TrueFalseActivity } from './components/TrueFalseActivity';
 import { FreeTextActivity } from './components/FreeTextActivity';
 import { MatchingActivity } from './components/MatchingActivity';
 import { WordSearchActivity } from './components/WordSearchActivity';
+import { CrosswordActivity } from './components/CrosswordActivity';
 import { ScoreCard } from './components/ScoreCard';
 import { ProgressBar } from './components/ProgressBar';
 import { AuthProvider } from './context/AuthContext';
@@ -271,6 +272,22 @@ function AppContent() {
                                 savedProgress={commonProps.savedProgress}
                                 onComplete={(score) => commonProps.onSubmit({
                                   respuestas: act.palabras,
+                                  calificacion: score,
+                                  correctas: Math.round((score / 100) * act.palabras.length),
+                                  total: act.palabras.length
+                                })}
+                              />
+                            );
+                          case 'crossword':
+                            return (
+                              <CrosswordActivity
+                                key={id}
+                                palabras={act.palabras}
+                                titulo={act.titulo}
+                                instruccion={act.instruccion}
+                                savedProgress={commonProps.savedProgress}
+                                onComplete={(score, userInputs) => commonProps.onSubmit({
+                                  respuestas: userInputs || act.palabras,
                                   calificacion: score,
                                   correctas: Math.round((score / 100) * act.palabras.length),
                                   total: act.palabras.length
