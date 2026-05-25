@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import data from './data/data.json';
 import { ModuleList } from './components/ModuleList';
 import { ModuleCard } from './components/ModuleCard';
@@ -37,6 +37,14 @@ function AppContent() {
   const { progress, saveActivityProgress, getActivityProgress, clearProgress } = useNotionProgress(
     user?.pageId ?? null
   );
+
+  // ── Reset de navegación al cambiar de usuario ──────────────────────────────
+  // Garantiza que cada nuevo login aterrice siempre en la pantalla de inicio,
+  // sin importar el módulo activo de la sesión anterior.
+  useEffect(() => {
+    setActiveModuleId(null);
+    setIsSidebarOpen(false);
+  }, [user?.pageId]);
 
   // ── Admin routing (después de todos los hooks) ───────────────────────────────────
   if (adminView === 'login') {

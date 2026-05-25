@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { guardarRespuesta, obtenerRespuestasEstudiante } from '../services/notionService';
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
@@ -6,7 +6,12 @@ import { guardarRespuesta, obtenerRespuestasEstudiante } from '../services/notio
 /** Mapa de módulo ID → actividad ID → progreso */
 type ProgressMap = Record<string, Record<string, { respuestas: Record<string, string>; calificacion: number }>>;
 
-const STORAGE_KEY = 'geografia_progreso';
+/**
+ * Prefijo base de la clave de localStorage.
+ * Se concatena con el ID del estudiante para aislar los datos por usuario.
+ * @example 'geografia_progreso_abc123'
+ */
+const STORAGE_KEY_PREFIX = 'geografia_progreso';
 
 /** Mapeo de módulo ID a nombre de select en Notion */
 const MODULE_NAME_MAP: Record<string, string> = {
@@ -18,18 +23,44 @@ const MODULE_NAME_MAP: Record<string, string> = {
 
 // ── Helpers localStorage (fallback offline) ────────────────────────────────────
 
-function loadFromStorage(): ProgressMap {
+/**
+ * Construye la clave de localStorage específica para el estudiante.
+ * Si no hay studentPageId (sin sesión), usa la clave genérica para evitar
+ * escrituras anónimas que contaminen sesiones futuras.
+ *
+ * @param studentPageId - ID del estudiante en Notion, o null.
+ * @returns Clave de localStorage única por usuario.
+ */
+function buildStorageKey(studentPageId: string | null): string {
+  return studentPageId
+    ? `${STORAGE_KEY_PREFIX}_${studentPageId}`
+    : `${STORAGE_KEY_PREFIX}_anonymous`;
+}
+
+/**
+ * Lee el progreso del localStorage para un usuario específico.
+ *
+ * @param studentPageId - ID del estudiante en Notion, o null.
+ * @returns ProgressMap del usuario, o mapa vacío si no hay datos.
+ */
+function loadFromStorage(studentPageId: string | null): ProgressMap {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(buildStorageKey(studentPageId));
     return raw ? (JSON.parse(raw) as ProgressMap) : {};
   } catch {
     return {};
   }
 }
 
-function saveToStorage(data: ProgressMap): void {
+/**
+ * Persiste el ProgressMap en localStorage bajo la clave del usuario.
+ *
+ * @param data - Mapa de progreso a guardar.
+ * @param studentPageId - ID del estudiante en Notion, o null.
+ */
+function saveToStorage(data: ProgressMap, studentPageId: string | null): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(buildStorageKey(studentPageId), JSON.stringify(data));
   } catch {
     console.warn('[useNotionProgress] localStorage no disponible — modo offline');
   }
@@ -39,14 +70,39 @@ function saveToStorage(data: ProgressMap): void {
 
 /**
  * Hook de progreso sincronizado con Notion.
- * - Guarda en localStorage como fallback offline (consistente con el hook original).
+ * - Aísla el localStorage por `studentPageId` para evitar contaminación de datos
+ *   entre estudiantes que compartan el mismo equipo.
+ * - Guarda en localStorage como fallback offline.
  * - Envía respuestas individuales a Notion en background.
  * - Requiere el pageId del estudiante autenticado.
  *
  * @param studentPageId - ID de la página del estudiante en Notion. null si no hay sesión.
  */
 export function useNotionProgress(studentPageId: string | null) {
-  const [progress, setProgress] = useState<ProgressMap>(loadFromStorage);
+  /**
+   * Inicializa el progress con los datos del usuario actual.
+   * El lazy initializer de useState solo corre en el primer render;
+   * para cambios de usuario usamos el efecto de abajo.
+   */
+  const [progress, setProgress] = useState<ProgressMap>(() => loadFromStorage(studentPageId));
+
+  /**
+   * Ref para detectar cuándo cambia el usuario sin depender del state.
+   * Permite recargar el progreso desde localStorage cuando otro estudiante
+   * inicia sesión en la misma máquina (sin recargar la página).
+   */
+  const prevStudentIdRef = useRef<string | null>(studentPageId);
+
+  /**
+   * Efecto: recarga el progreso desde localStorage cada vez que cambia
+   * el studentPageId (cambio de sesión de usuario).
+   */
+  useEffect(() => {
+    if (prevStudentIdRef.current !== studentPageId) {
+      prevStudentIdRef.current = studentPageId;
+      setProgress(loadFromStorage(studentPageId));
+    }
+  }, [studentPageId]);
 
   /**
    * Guarda el resultado de una actividad tanto en localStorage como en Notion.
@@ -64,7 +120,7 @@ export function useNotionProgress(studentPageId: string | null) {
       respuestas: Record<string, string>,
       calificacion: number
     ) => {
-      // 1. Actualizar estado local y localStorage (fallback offline)
+      // 1. Actualizar estado local y localStorage (fallback offline, aislado por usuario)
       setProgress((prev) => {
         const next: ProgressMap = {
           ...prev,
@@ -73,7 +129,7 @@ export function useNotionProgress(studentPageId: string | null) {
             [actividadId]: { respuestas, calificacion },
           },
         };
-        saveToStorage(next);
+        saveToStorage(next, studentPageId);
         return next;
       });
 
@@ -124,9 +180,9 @@ export function useNotionProgress(studentPageId: string | null) {
    * No afecta los registros ya guardados en Notion.
    */
   const clearProgress = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(buildStorageKey(studentPageId));
     setProgress({});
-  }, []);
+  }, [studentPageId]);
 
   return {
     progress,

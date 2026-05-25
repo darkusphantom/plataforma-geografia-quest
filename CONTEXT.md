@@ -13,8 +13,10 @@ Plataforma web educativa interactiva orientada a estudiantes de primer año de e
   - **Respuesta Libre**: Verificación de texto mediante búsqueda inteligente de palabras clave, ignorando acentos y mayúsculas.
   - **Verdadero o Falso**: Actividades clásicas de selección binaria.
   - **Matching (Relacionar Conceptos)**: Seleccionar la opción correcta que corresponde a un concepto específico.
+  - **Sopa de Letras (Word Search)**: Actividad interactiva para encontrar palabras clave en una cuadrícula generada dinámicamente.
 - **Sistema de Calificación Dual**: Asigna puntuaciones del 0 al 100 y ofrece retroalimentación visual con emojis y colores (✅ Éxito, 😊 Regular, ❌ Error).
-- **Persistencia de Datos (Local)**: Guarda el avance del estudiante de forma automática en el `localStorage` del navegador. Esto evita la necesidad de una base de datos o sistema de login, permitiendo al usuario continuar desde donde lo dejó.
+- **Sistema de Autenticación**: Gestión de sesiones de estudiantes y administradores, asegurando acceso protegido y personalizado.
+- **Persistencia y Sincronización de Datos**: Guarda el avance del estudiante en el `localStorage` aislado mediante namespacing (`ID de usuario`) para evitar cruce de datos en equipos compartidos, y sincroniza el progreso en background con una base de datos en Notion.
 
 ## 3. Tecnologías y Stack Técnico
 - **Frontend Framework**: React 18
@@ -37,12 +39,21 @@ src/
 │   ├── ModuleList.jsx      # Contenedor para la lista de módulos
 │   ├── ProgressBar.jsx     # Barra de progreso visual
 │   ├── ScoreCard.jsx       # Interfaz de calificación final tras completar una actividad
-│   └── TrueFalseActivity.jsx# Maneja las actividades de verdadero/falso
+│   ├── TrueFalseActivity.jsx# Maneja las actividades de verdadero/falso
+│   └── WordSearchActivity.jsx# Maneja la actividad de sopa de letras
+├── auth/                   # Componentes de autenticación
+│   ├── LoginPage.jsx       # Acceso para estudiantes
+│   └── RegisterPage.jsx    # Registro de estudiantes
+├── admin/                  # Componentes de administración
+│   ├── AdminLoginPage.jsx  # Acceso para administradores
+│   └── AdminDashboard.jsx  # Tablero de reportes de estudiantes
 ├── data/
 │   └── data.json           # Fuente central de verdad (Módulos, Preguntas, Glosario)
 ├── hooks/
+│   ├── useAuth.js          # Gestión del estado de autenticación de usuarios
 │   ├── useGlossary.jsx     # Lógica para procesar y exponer el glosario
-│   └── useProgress.jsx     # Gestión del progreso utilizando localStorage
+│   ├── useNotionProgress.ts# Sincronización de progreso con Notion y fallback offline
+│   └── useProgress.jsx     # (Legacy) Gestión del progreso local
 ├── utils/
 │   ├── evaluation.js       # Lógica pura de evaluación (comparación de textos, acentos)
 │   └── feedback.js         # Lógica para asignar emojis/colores según puntaje
@@ -70,10 +81,13 @@ La función `getFeedback(score)`:
 - Transforma un puntaje numérico en un objeto de retroalimentación visual y de texto.
 - Asigna colores (verde, naranja, rojo) y emojis basados en el rendimiento.
 
-### 6.3. Gestión de Progreso (`hooks/useProgress.jsx`)
-- Utiliza la clave `geografia_progreso` en el `localStorage`.
+### 6.3. Gestión de Progreso y Sincronización (`hooks/useNotionProgress.ts`)
+- Utiliza la clave aislada `geografia_progreso_[studentPageId]` en el `localStorage` para prevenir que estudiantes en un mismo dispositivo compartan caché de progreso.
 - Estructura guardada por módulo y actividad, almacenando las respuestas enviadas y la calificación obtenida.
-- Flujo: `App.jsx` carga el estado inicial, lo pasa a las actividades, y si una actividad ya fue completada, muestra directamente su `ScoreCard`.
+- Flujo: `App.jsx` carga el estado inicial, lo sincroniza en background con la API de Notion al responder actividades, y pasa el estado local a los componentes para retroalimentación inmediata.
+
+### 6.4. Sistema de Autenticación (`hooks/useAuth.js`)
+- Gestiona el acceso de estudiantes y administradores, asegurando que las vistas (como el progreso y el Dashboard de administrador) sean exclusivas según el rol del usuario autenticado.
 
 ## 7. Diseño y UI (Tailwind CSS)
 - **Sidebar**: Implementa un menú "Off-canvas" en móviles que se despliega desde un lado. En pantallas grandes, permanece estático a la izquierda.

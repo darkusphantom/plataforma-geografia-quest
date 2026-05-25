@@ -481,6 +481,26 @@ export function WordSearchActivity({ palabras, titulo, instruccion, onComplete, 
   /** @type {React.MutableRefObject<{row: number, col: number}|null>} Ref que registra la última celda sobre la que pasó el puntero para filtrar eventos de movimiento duplicados */
   const lastHoveredCellRef = useRef(null);
 
+  /**
+   * Efecto: sincroniza el estado interno con `savedProgress` cuando cambia
+   * entre renders (ej: nuevo usuario que no tiene progreso previo).
+   * Sin este efecto, el `useReducer` conserva el estado de la sesión anterior
+   * porque React no re-ejecuta el lazy initializer tras el primer montaje.
+   *
+   * @see https://react.dev/reference/react/useReducer#avoiding-recreating-the-initial-state
+   */
+  useEffect(() => {
+    if (!savedProgress) {
+      // Nuevo usuario o actividad sin progreso: limpiar estado y ref
+      lastReportedScoreRef.current = null;
+      dispatch({ type: 'RESET' });
+    } else {
+      // Restaurar el score reportado para evitar doble-llamada a onComplete
+      lastReportedScoreRef.current = savedProgress.calificacion;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedProgress]);
+
   // ─── Generación de la grilla (una sola vez por prop de palabras) ───────────
   const { grid } = useMemo(() => generateGrid(frozenPalabras), [frozenPalabras]);
 
