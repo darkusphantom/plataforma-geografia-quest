@@ -374,7 +374,16 @@
             "puntos": 1.25
           }
         ]
-      }
+      },
+      "actividades": [
+        {
+          "tipo": "word-search",
+          "id": "act-word-search-atmosfera",
+          "titulo": "Encuentra las Palabras",
+          "instruccion": "Ubica en la sopa de letras las siguientes palabras relacionadas con el tema.",
+          "palabras": ["ATMOSFERA", "CLIMA", "TIEMPO", "VIENTOS", "ALTITUD"]
+        }
+      ]
     },
 
     {

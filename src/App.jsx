@@ -6,6 +6,8 @@ import { ContentRenderer } from './components/ContentRenderer';
 import { TrueFalseActivity } from './components/TrueFalseActivity';
 import { FreeTextActivity } from './components/FreeTextActivity';
 import { MatchingActivity } from './components/MatchingActivity';
+import { WordSearchActivity } from './components/WordSearchActivity';
+import { ScoreCard } from './components/ScoreCard';
 import { ProgressBar } from './components/ProgressBar';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
@@ -224,36 +226,63 @@ function AppContent() {
               
               <div className="mt-16 pt-8 border-t-2 border-gray-100">
                 {(() => {
-                  if (!activeModule.actividad) return null;
+                  const acts = [];
+                  if (activeModule.actividad) acts.push(activeModule.actividad);
+                  if (activeModule.actividades) acts.push(...activeModule.actividades);
+                  if (acts.length === 0) return null;
                   
-                  const { tipo, id } = activeModule.actividad;
-                  const commonProps = {
-                    savedProgress: getActivityProgress(activeModule.id, id),
-                    onSubmit: ({ respuestas, calificacion, correctas, total }) => {
-                      // Se podría guardar 'correctas' y 'total' en useNotionProgress si se deseara
-                      saveActivityProgress(activeModule.id, id, respuestas, calificacion);
-                    },
-                    onSiguiente: hasNextModule ? handleNextModule : undefined
-                  };
+                  return (
+                    <div className="flex flex-col gap-12">
+                      {acts.map((act, index) => {
+                        const { tipo, id } = act;
+                        // onSiguiente avanza de módulo solo en la última actividad de la lista
+                        const isLastActivity = index === acts.length - 1;
+                        
+                        const commonProps = {
+                          savedProgress: getActivityProgress(activeModule.id, id),
+                          onSubmit: ({ respuestas, calificacion, correctas, total }) => {
+                            saveActivityProgress(activeModule.id, id, respuestas, calificacion);
+                          },
+                          onSiguiente: (isLastActivity && hasNextModule) ? handleNextModule : undefined
+                        };
 
-                  switch (tipo) {
-                    case 'verdadero-falso':
-                      return <TrueFalseActivity questions={activeModule.actividad.preguntas} {...commonProps} />;
-                    case 'respuesta-libre':
-                      return <FreeTextActivity questions={activeModule.actividad.preguntas} {...commonProps} />;
-                    case 'matching':
-                      return <MatchingActivity pares={activeModule.actividad.pares} {...commonProps} />;
-                    default:
-                      return (
-                        <div className="bg-blue-50 p-8 rounded-xl border border-blue-100 text-center">
-                          <h3 className="text-2xl font-bold text-acento mb-2">Actividad Práctica</h3>
-                          <p className="text-gray-600 mb-6">La actividad tipo "{tipo}" estará disponible próximamente.</p>
-                          <button disabled className="bg-acento text-white px-8 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
-                            Iniciar Actividad
-                          </button>
-                        </div>
-                      );
-                  }
+                        switch (tipo) {
+                          case 'verdadero-falso':
+                            return <TrueFalseActivity key={id} questions={act.preguntas} {...commonProps} />;
+                          case 'respuesta-libre':
+                            return <FreeTextActivity key={id} questions={act.preguntas} {...commonProps} />;
+                          case 'matching':
+                            return <MatchingActivity key={id} pares={act.pares} {...commonProps} />;
+                          case 'word-search':
+                            return (
+                              <WordSearchActivity
+                                key={id}
+                                palabras={act.palabras}
+                                titulo={act.titulo}
+                                instruccion={act.instruccion}
+                                savedProgress={commonProps.savedProgress}
+                                onComplete={(score) => commonProps.onSubmit({
+                                  respuestas: act.palabras,
+                                  calificacion: score,
+                                  correctas: Math.round((score / 100) * act.palabras.length),
+                                  total: act.palabras.length
+                                })}
+                              />
+                            );
+                          default:
+                            return (
+                              <div key={id} className="bg-blue-50 p-8 rounded-xl border border-blue-100 text-center">
+                                <h3 className="text-2xl font-bold text-acento mb-2">Actividad Práctica</h3>
+                                <p className="text-gray-600 mb-6">La actividad tipo "{tipo}" estará disponible próximamente.</p>
+                                <button disabled className="bg-acento text-white px-8 py-3 rounded-lg font-bold opacity-50 cursor-not-allowed">
+                                  Iniciar Actividad
+                                </button>
+                              </div>
+                            );
+                        }
+                      })}
+                    </div>
+                  );
                 })()}
               </div>
             </div>

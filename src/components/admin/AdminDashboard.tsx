@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from "react";
 import {
   obtenerTodasLasRespuestas,
   type StudentResult,
   type NotionAnswer,
-} from '../../services/notionService';
+} from "../../services/notionService";
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -17,11 +17,11 @@ function flattenRows(results: StudentResult[]) {
     if (student.answers.length === 0) {
       rows.push({
         Cedula: student.cedula,
-        Modulo: '',
-        PreguntaID: '',
-        Respuesta: '',
-        Puntaje: '',
-        Fecha: '',
+        Modulo: "",
+        PreguntaID: "",
+        Respuesta: "",
+        Puntaje: "",
+        Fecha: "",
       });
     } else {
       for (const ans of student.answers) {
@@ -31,7 +31,7 @@ function flattenRows(results: StudentResult[]) {
           PreguntaID: ans.preguntaId,
           Respuesta: ans.respuesta,
           Puntaje: String(ans.puntaje),
-          Fecha: ans.fecha ? new Date(ans.fecha).toLocaleString('es-VE') : '',
+          Fecha: ans.fecha ? new Date(ans.fecha).toLocaleString("es-VE") : "",
         });
       }
     }
@@ -44,25 +44,31 @@ function exportCSV(results: StudentResult[]) {
   if (rows.length === 0) return;
   const headers = Object.keys(rows[0]);
   const csvContent = [
-    headers.join(','),
+    headers.join(","),
     ...rows.map((r) =>
-      headers
-        .map((h) => `"${(r[h] ?? '').replace(/"/g, '""')}"`)
-        .join(',')
+      headers.map((h) => `"${(r[h] ?? "").replace(/"/g, '""')}"`).join(","),
     ),
-  ].join('\n');
-  downloadFile(csvContent, 'resultados_geografia.csv', 'text/csv;charset=utf-8;');
+  ].join("\n");
+  downloadFile(
+    csvContent,
+    "resultados_geografia.csv",
+    "text/csv;charset=utf-8;",
+  );
 }
 
 function exportJSON(results: StudentResult[]) {
   const rows = flattenRows(results);
-  downloadFile(JSON.stringify(rows, null, 2), 'resultados_geografia.json', 'application/json');
+  downloadFile(
+    JSON.stringify(rows, null, 2),
+    "resultados_geografia.json",
+    "application/json",
+  );
 }
 
 function downloadFile(content: string, filename: string, mimeType: string) {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   a.click();
@@ -71,14 +77,26 @@ function downloadFile(content: string, filename: string, mimeType: string) {
 
 // ── Subcomponentes ─────────────────────────────────────────────────────────────
 
-function StatCard({ icon, label, value, sub }: { icon: string; label: string; value: string | number; sub?: string }) {
+function StatCard({
+  icon,
+  label,
+  value,
+  sub,
+}: {
+  icon: string;
+  label: string;
+  value: string | number;
+  sub?: string;
+}) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-start gap-4">
-      <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl flex-shrink-0">
+      <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl shrink-0">
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{label}</p>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          {label}
+        </p>
         <p className="text-2xl font-extrabold text-slate-800 mt-0.5">{value}</p>
         {sub && <p className="text-xs text-slate-400 mt-0.5 truncate">{sub}</p>}
       </div>
@@ -86,13 +104,22 @@ function StatCard({ icon, label, value, sub }: { icon: string; label: string; va
   );
 }
 
-function ScoreBadge({ score }: { score: number }) {
-  let cls = 'bg-red-100 text-red-700';
-  if (score >= 80) cls = 'bg-green-100 text-green-700';
-  else if (score >= 50) cls = 'bg-yellow-100 text-yellow-700';
+/**
+ * Badge de puntaje con color semafórico basado en porcentaje relativo al máximo.
+ *
+ * @param score - Puntaje obtenido.
+ * @param max - Puntaje máximo posible (default 20 para totalScore, o el máx por pregunta).
+ */
+function ScoreBadge({ score, max = 20 }: { score: number; max?: number }) {
+  const pct = max > 0 ? (score / max) * 100 : 0;
+  let cls = "bg-red-100 text-red-700";
+  if (pct >= 80) cls = "bg-green-100 text-green-700";
+  else if (pct >= 50) cls = "bg-yellow-100 text-yellow-700";
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${cls}`}>
-      {score}
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${cls}`}
+    >
+      {parseFloat(score.toFixed(2))}
     </span>
   );
 }
@@ -105,8 +132,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [error, setError] = useState<string | null>(null);
 
   // Filtros
-  const [searchCedula, setSearchCedula] = useState('');
-  const [filterModulo, setFilterModulo] = useState('');
+  const [searchCedula, setSearchCedula] = useState("");
+  const [filterModulo, setFilterModulo] = useState("");
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null);
 
   // Cargar datos al montar
@@ -114,22 +141,26 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     setIsLoading(true);
     obtenerTodasLasRespuestas()
       .then(setResults)
-      .catch((err) => setError(err.message ?? 'Error al cargar datos'))
+      .catch((err) => setError(err.message ?? "Error al cargar datos"))
       .finally(() => setIsLoading(false));
   }, []);
 
   // Lista única de módulos para el filtro
   const modulos = useMemo(() => {
     const set = new Set<string>();
-    for (const r of results) for (const a of r.answers) if (a.modulo) set.add(a.modulo);
+    for (const r of results)
+      for (const a of r.answers) if (a.modulo) set.add(a.modulo);
     return Array.from(set).sort();
   }, [results]);
 
   // Resultados filtrados
   const filtered = useMemo(() => {
     return results.filter((r) => {
-      const cedulaMatch = r.cedula.toLowerCase().includes(searchCedula.toLowerCase().trim());
-      const moduloMatch = !filterModulo || r.answers.some((a) => a.modulo === filterModulo);
+      const cedulaMatch = r.cedula
+        .toLowerCase()
+        .includes(searchCedula.toLowerCase().trim());
+      const moduloMatch =
+        !filterModulo || r.answers.some((a) => a.modulo === filterModulo);
       return cedulaMatch && moduloMatch;
     });
   }, [results, searchCedula, filterModulo]);
@@ -137,16 +168,26 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   // Estadísticas globales
   const stats = useMemo(() => {
     const totalStudents = results.length;
-    const studentsWithAnswers = results.filter((r) => r.answers.length > 0).length;
-    const allScores = results.flatMap((r) => r.answers.map((a) => a.puntaje));
-    const avgScore = allScores.length
-      ? Math.round(allScores.reduce((s, v) => s + v, 0) / allScores.length)
+    const studentsWithAnswers = results.filter(
+      (r) => r.answers.length > 0,
+    ).length;
+    // Promedio de nota total (0-20) entre estudiantes que tienen respuestas
+    const studentsScores = results
+      .filter((r) => r.answers.length > 0)
+      .map((r) => r.totalScore);
+    const avgScore = studentsScores.length
+      ? parseFloat(
+          (
+            studentsScores.reduce((s, v) => s + v, 0) / studentsScores.length
+          ).toFixed(2),
+        )
       : 0;
     const moduloCounts: Record<string, number> = {};
     for (const r of results)
       for (const a of r.answers)
         moduloCounts[a.modulo] = (moduloCounts[a.modulo] ?? 0) + 1;
-    const topModulo = Object.entries(moduloCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—';
+    const topModulo =
+      Object.entries(moduloCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
     return { totalStudents, studentsWithAnswers, avgScore, topModulo };
   }, [results]);
 
@@ -237,17 +278,26 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
         {/* Stats */}
         {!isLoading && !error && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard icon="👥" label="Total Estudiantes" value={stats.totalStudents} />
-            <StatCard icon="✅" label="Con respuestas" value={stats.studentsWithAnswers} />
+            <StatCard
+              icon="👥"
+              label="Total Estudiantes"
+              value={stats.totalStudents}
+            />
+            <StatCard
+              icon="✅"
+              label="Con respuestas"
+              value={stats.studentsWithAnswers}
+            />
             <StatCard
               icon="📈"
-              label="Promedio global"
-              value={`${stats.avgScore} pts`}
+              label="Promedio nota total"
+              value={`${stats.avgScore}/20`}
+              sub="Promedio de notas acumuladas"
             />
             <StatCard
               icon="🏆"
               label="Módulo más activo"
-              value={stats.topModulo || '—'}
+              value={stats.topModulo || "—"}
             />
           </div>
         )}
@@ -259,7 +309,9 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                🔍
+              </span>
               <input
                 id="admin-search-cedula"
                 type="text"
@@ -278,13 +330,18 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               >
                 <option value="">Todos los módulos</option>
                 {modulos.map((m) => (
-                  <option key={m} value={m}>{m}</option>
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
                 ))}
               </select>
             </div>
             {(searchCedula || filterModulo) && (
               <button
-                onClick={() => { setSearchCedula(''); setFilterModulo(''); }}
+                onClick={() => {
+                  setSearchCedula("");
+                  setFilterModulo("");
+                }}
                 className="text-sm font-semibold text-slate-500 hover:text-indigo-600 transition-colors px-3 py-2.5 rounded-xl hover:bg-slate-50"
               >
                 ✕ Limpiar
@@ -293,7 +350,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
           </div>
           {(searchCedula || filterModulo) && (
             <p className="text-xs text-slate-400 mt-3">
-              Mostrando <strong>{filtered.length}</strong> de <strong>{results.length}</strong> estudiantes
+              Mostrando <strong>{filtered.length}</strong> de{" "}
+              <strong>{results.length}</strong> estudiantes
             </p>
           )}
         </div>
@@ -311,13 +369,17 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 disabled:opacity-50 transition-colors flex items-center gap-1.5"
             >
               <svg
-                className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`}
+                className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
               </svg>
               Actualizar
             </button>
@@ -345,8 +407,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
               <div className="text-5xl mb-4">🎓</div>
               <p className="text-slate-500 font-semibold">
                 {results.length === 0
-                  ? 'No hay estudiantes registrados aún.'
-                  : 'No hay resultados para los filtros seleccionados.'}
+                  ? "No hay estudiantes registrados aún."
+                  : "No hay resultados para los filtros seleccionados."}
               </p>
             </div>
           )}
@@ -356,7 +418,11 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
             <div className="divide-y divide-slate-50">
               {filtered.map((student) => {
                 const isExpanded = expandedStudent === student.pageId;
-                const modulosUnicos = [...new Set(student.answers.map((a) => a.modulo).filter(Boolean))];
+                const modulosUnicos = [
+                  ...new Set(
+                    student.answers.map((a) => a.modulo).filter(Boolean),
+                  ),
+                ];
 
                 return (
                   <div key={student.pageId}>
@@ -376,33 +442,45 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-slate-800">
-                          Cédula: <span className="font-mono">{student.cedula}</span>
+                          Cédula:{" "}
+                          <span className="font-mono">{student.cedula}</span>
                         </p>
                         <p className="text-xs text-slate-400 mt-0.5">
                           {student.answers.length === 0
-                            ? 'Sin respuestas registradas'
-                            : `${student.answers.length} respuesta${student.answers.length > 1 ? 's' : ''} · ${modulosUnicos.length} módulo${modulosUnicos.length > 1 ? 's' : ''}`}
+                            ? "Sin respuestas registradas"
+                            : `${student.answers.length} respuesta${student.answers.length > 1 ? "s" : ""} · ${modulosUnicos.length} módulo${modulosUnicos.length > 1 ? "s" : ""}`}
                         </p>
                       </div>
 
                       {/* Puntaje total */}
                       <div className="text-right flex-shrink-0">
                         {student.answers.length > 0 ? (
-                          <ScoreBadge score={student.totalScore} />
+                          <>
+                            <ScoreBadge score={student.totalScore} max={20} />
+                            <p className="text-xs text-slate-400 mt-1">
+                              /20 pts
+                            </p>
+                          </>
                         ) : (
-                          <span className="text-xs text-slate-300 font-medium">—</span>
+                          <span className="text-xs text-slate-300 font-medium">
+                            —
+                          </span>
                         )}
-                        <p className="text-xs text-slate-400 mt-1">pts totales</p>
                       </div>
 
                       {/* Chevron */}
                       <svg
-                        className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`}
+                        className={`w-5 h-5 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? "rotate-180" : ""}`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
 
@@ -411,7 +489,8 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                       <div className="bg-slate-50 border-t border-slate-100 px-6 py-4">
                         {student.answers.length === 0 ? (
                           <p className="text-sm text-slate-400 italic text-center py-4">
-                            Este estudiante aún no ha respondido ninguna actividad.
+                            Este estudiante aún no ha respondido ninguna
+                            actividad.
                           </p>
                         ) : (
                           <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -437,31 +516,45 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                               </thead>
                               <tbody className="divide-y divide-slate-100 bg-white">
                                 {student.answers.map((ans: NotionAnswer) => (
-                                  <tr key={ans.id} className="hover:bg-slate-50 transition-colors">
+                                  <tr
+                                    key={ans.id}
+                                    className="hover:bg-slate-50 transition-colors"
+                                  >
                                     <td className="px-4 py-3 font-semibold text-slate-700 whitespace-nowrap">
-                                      {ans.modulo || <span className="text-slate-300 italic">—</span>}
+                                      {ans.modulo || (
+                                        <span className="text-slate-300 italic">
+                                          —
+                                        </span>
+                                      )}
                                     </td>
                                     <td className="px-4 py-3 text-slate-500 font-mono text-xs whitespace-nowrap">
-                                      {ans.preguntaId || '—'}
+                                      {ans.preguntaId || "—"}
                                     </td>
                                     <td className="px-4 py-3 text-slate-700 max-w-xs">
                                       <span className="line-clamp-2">
-                                        {ans.respuesta || <span className="text-slate-300 italic">Sin respuesta</span>}
+                                        {ans.respuesta || (
+                                          <span className="text-slate-300 italic">
+                                            Sin respuesta
+                                          </span>
+                                        )}
                                       </span>
                                     </td>
                                     <td className="px-4 py-3 text-center">
-                                      <ScoreBadge score={ans.puntaje} />
+                                      <ScoreBadge score={ans.puntaje} max={5} />
                                     </td>
                                     <td className="px-4 py-3 text-slate-400 text-xs whitespace-nowrap hidden md:table-cell">
                                       {ans.fecha
-                                        ? new Date(ans.fecha).toLocaleString('es-VE', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                          })
-                                        : '—'}
+                                        ? new Date(ans.fecha).toLocaleString(
+                                            "es-VE",
+                                            {
+                                              day: "2-digit",
+                                              month: "2-digit",
+                                              year: "numeric",
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                            },
+                                          )
+                                        : "—"}
                                     </td>
                                   </tr>
                                 ))}
@@ -480,7 +573,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
         {/* Footer */}
         <p className="text-center text-xs text-slate-400 pb-4">
-          Panel de administración · Plataforma Geografía 1° ·{' '}
+          Panel de administración · Plataforma Geografía 1° ·{" "}
           <button
             onClick={onLogout}
             className="text-indigo-400 hover:text-indigo-600 underline font-medium transition-colors"
