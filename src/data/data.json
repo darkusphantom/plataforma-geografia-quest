@@ -6,7 +6,6 @@
     "plazo": "7 días",
     "enfoque": "mobile-first, responsive, accesible"
   },
-  
   "glossario": [
     {
       "id": "tectonica",
@@ -36,7 +35,7 @@
     {
       "id": "atmosfera",
       "termino": "Atmósfera",
-      "definicion": "Envoltura gaseosa que rodea la Tierra y permite la vida sobre el planeta."
+      "definicion": "Capa de gases que envuelve a un cuerpo celeste (como la Tierra) y se mantiene unida a él gracias a la fuerza de gravedad."
     },
     {
       "id": "evaporacion",
@@ -71,15 +70,34 @@
     {
       "id": "clima",
       "termino": "Clima",
-      "definicion": "Conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo."
+      "definicion": "Estado promedio de las condiciones atmosféricas en un lugar específico, calculado a lo largo de largos períodos, generalmente de 20 a 30 años."
     },
     {
       "id": "tiempo",
       "termino": "Tiempo",
-      "definicion": "Estado actual de la atmósfera en un lugar y momento específico."
+      "definicion": "Se determina mediante el análisis de variables como temperatura, humedad, presión, viento y precipitaciones."
+    },
+    {
+      "id": "tectonicos",
+      "termino": "Tectónicos",
+      "definicion": "Lagos que se constituyen cuando la depresión es producto de una falla."
+    },
+    {
+      "id": "glaciares",
+      "termino": "Glaciares",
+      "definicion": "Lagos que se generan cuando el agua ocupa las depresiones formadas por antiguos glaciares."
+    },
+    {
+      "id": "volcanicos",
+      "termino": "Volcánicos",
+      "definicion": "Lagos que se deben a la acumulación de agua de los cráteres de volcanes antiguos que cesaron su actividad."
+    },
+    {
+      "id": "de-barra",
+      "termino": "De barra",
+      "definicion": "Lagos que se forman por la acumulación de sedimentos por deslizamientos de tierra, entre otras causas, que obstruyen el paso del agua de una corriente."
     }
   ],
-
   "modulos": [
     {
       "id": "1-tectonica-placas",
@@ -170,7 +188,6 @@
         ]
       }
     },
-
     {
       "id": "2-volcanes-sismos",
       "numero": 2,
@@ -186,6 +203,11 @@
           {
             "tipo": "parrafo",
             "texto": "Un <glossary>volcán</glossary> es un conducto natural que pone en contacto el exterior con depósitos de <glossary>magma</glossary> subterráneo. El <glossary>magma</glossary> es materia ígnea en estado fluido que asciende hasta la superficie terrestre a través de una chimenea."
+          },
+          {
+            "tipo": "callout",
+            "icono": "💡",
+            "texto": "¿Sabías que... el volcán es una estructura geológica por la que emergen magma en forma de lava, ceniza volcánica y gases provenientes del interior terrestre?"
           },
           {
             "tipo": "titulo-subseccion",
@@ -221,6 +243,11 @@
           {
             "tipo": "parrafo",
             "texto": "Los movimientos sísmicos generalmente se originan por el choque de placas continentales y oceánicas. Estos movimientos vibratorios que presenta la Tierra se llaman sismos o terremotos. Un ejemplo famoso es el terremoto de México en 1985, ocasionado por el choque de la placa norteamericana con la placa de Cocos."
+          },
+          {
+            "tipo": "callout",
+            "icono": "💡",
+            "texto": "¿Sabías que el magma puede contener vapor de agua, dióxido de carbono y dióxido de azufre?"
           }
         ]
       },
@@ -261,16 +288,58 @@
           "titulo": "Crucigrama Volcánico",
           "instruccion": "Completa el crucigrama con los conceptos aprendidos sobre volcanes.",
           "palabras": [
-            { "id": "1", "palabra": "CHIMENEA", "pista": "Tubo por donde sube el magma.", "fila": 0, "col": 5, "direccion": "abajo" },
-            { "id": "2", "palabra": "MAGMA", "pista": "Materia ígnea en estado fluido.", "fila": 3, "col": 5, "direccion": "derecha" },
-            { "id": "3", "palabra": "CRATER", "pista": "Abertura superior del volcán.", "fila": 6, "col": 1, "direccion": "derecha" },
-            { "id": "4", "palabra": "CONO", "pista": "Estructura acumulada del volcán.", "fila": 6, "col": 1, "direccion": "abajo" },
-            { "id": "5", "palabra": "FOCO", "pista": "Centro de origen del magma.", "fila": 9, "col": 0, "direccion": "derecha" }
+            {
+              "id": "1",
+              "palabra": "CHIMENEA",
+              "pista": "Tubo por donde sube el magma.",
+              "fila": 0,
+              "col": 5,
+              "direccion": "abajo"
+            },
+            {
+              "id": "2",
+              "palabra": "MAGMA",
+              "pista": "Materia ígnea en estado fluido.",
+              "fila": 3,
+              "col": 5,
+              "direccion": "derecha"
+            },
+            {
+              "id": "3",
+              "palabra": "CRATER",
+              "pista": "Abertura superior del volcán.",
+              "fila": 6,
+              "col": 1,
+              "direccion": "derecha"
+            },
+            {
+              "id": "4",
+              "palabra": "CONO",
+              "pista": "Estructura acumulada del volcán.",
+              "fila": 6,
+              "col": 4,
+              "direccion": "abajo"
+            },
+            {
+              "id": "5h",
+              "palabra": "FOCO",
+              "pista": "Centro de origen del magma (horizontal).",
+              "fila": 9,
+              "col": 4,
+              "direccion": "derecha"
+            },
+            {
+              "id": "5v",
+              "palabra": "LAVA",
+              "pista": "Magma que sale al exterior por el volcán (vertical).",
+              "fila": 6,
+              "col": 7,
+              "direccion": "abajo"
+            }
           ]
         }
       ]
     },
-
     {
       "id": "3-atmosfera-clima",
       "numero": 3,
@@ -286,6 +355,11 @@
           {
             "tipo": "parrafo",
             "texto": "La <glossary>atmósfera</glossary> es la envoltura gaseosa que rodea a la Tierra y permite la vida sobre el planeta. Está compuesta principalmente por nitrógeno (78%) y oxígeno (21%). La atmósfera nos protege de las peligrosas radiaciones de rayos ultravioletas e infrarrojos emitidos por el sol."
+          },
+          {
+            "tipo": "callout",
+            "icono": "🌍",
+            "texto": "¿Sabías que...la <glossary>atmósfera</glossary> es una capa de gases que envuelve a un cuerpo celeste como la Tierra y se mantiene unida a él gracias a la fuerza de gravedad?"
           },
           {
             "tipo": "titulo-subseccion",
@@ -308,6 +382,11 @@
           {
             "tipo": "parrafo",
             "texto": "Es importante distinguir entre <glossary>tiempo</glossary> y <glossary>clima</glossary>. El tiempo es el estado actual de la atmósfera en un lugar y momento específico (puede cambiar de un día a otro). El clima es el conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo (años o décadas)."
+          },
+          {
+            "tipo": "callout",
+            "icono": "🌡️",
+            "texto": "¿Sabías que...el <glossary>tiempo</glossary> se determina mediante el análisis de variables como temperatura, humedad, presión, viento y precipitaciones?"
           },
           {
             "tipo": "titulo-subseccion",
@@ -335,6 +414,11 @@
               "Distancia al mar: Océanos regulan la temperatura",
               "Corrientes marinas: Transportan aguas cálidas o frías"
             ]
+          },
+          {
+            "tipo": "callout",
+            "icono": "📊",
+            "texto": "¿Sabías que...el <glossary>clima</glossary> es el estado promedio de las condiciones atmosféricas en un lugar específico, calculado a lo largo de largos períodos, generalmente de 20 a 30 años?"
           }
         ]
       },
@@ -396,11 +480,16 @@
           "id": "act-word-search-atmosfera",
           "titulo": "Encuentra las Palabras",
           "instruccion": "Ubica en la sopa de letras las siguientes palabras relacionadas con el tema.",
-          "palabras": ["ATMOSFERA", "CLIMA", "TIEMPO", "VIENTOS", "ALTITUD"]
+          "palabras": [
+            "ATMOSFERA",
+            "CLIMA",
+            "TIEMPO",
+            "VIENTOS",
+            "ALTITUD"
+          ]
         }
       ]
     },
-
     {
       "id": "4-ciclo-hidrologico",
       "numero": 4,
@@ -453,6 +542,15 @@
           },
           {
             "tipo": "titulo-subseccion",
+            "texto": "Clasificación de los Ríos"
+          },
+          {
+            "tipo": "callout",
+            "icono": "🌊",
+            "texto": "¿Sabías que...los ríos se clasifican en Principal (el río de mayor longitud y caudal de una cuenca) y Afluente o Tributario (ríos más pequeños que desembocan en el río principal, aportándole su caudal)?"
+          },
+          {
+            "tipo": "titulo-subseccion",
             "texto": "Tipos de Desembocadura"
           },
           {
@@ -468,7 +566,16 @@
           },
           {
             "tipo": "parrafo",
-            "texto": "Son grandes extensiones de agua dulce o salada que se depositan en depresiones de la corteza terrestre. Los lagos pueden ser glaciares (formados por glaciares), volcánicos (en cráteres) o de barrera (formados por barreras naturales)."
+            "texto": "Son grandes extensiones de agua dulce o salada que se depositan en depresiones de la corteza terrestre. Según su origen se clasifican en: <glossary>Tectónicos</glossary>, <glossary>Glaciares</glossary>, <glossary>Volcánicos</glossary> y <glossary>De barra</glossary>."
+          },
+          {
+            "tipo": "lista",
+            "items": [
+              "<glossary>Tectónicos</glossary>: se constituyen cuando la depresión es producto de una falla.",
+              "<glossary>Glaciares</glossary>: se generan cuando el agua ocupa las depresiones formadas por antiguos glaciares.",
+              "<glossary>Volcánicos</glossary>: se deben a la acumulación de agua de los cráteres de volcanes antiguos que cesaron su actividad.",
+              "<glossary>De barra</glossary>: se forman por la acumulación de sedimentos por deslizamientos de tierra, entre otras causas, que obstruyen el paso del agua de una corriente."
+            ]
           },
           {
             "tipo": "titulo-subseccion",
@@ -519,7 +626,6 @@
       }
     }
   ],
-
   "configuracion": {
     "colores": {
       "fondo": "#FFFFFF",
@@ -542,7 +648,6 @@
       "desktop": "1024px"
     }
   },
-
   "sistemaPuntuacion": {
     "escala": "0-20",
     "puntosPorModulo": 5,
@@ -569,7 +674,6 @@
       }
     }
   },
-
   "requerimientos": {
     "responsive": true,
     "almacenamientoLocal": true,

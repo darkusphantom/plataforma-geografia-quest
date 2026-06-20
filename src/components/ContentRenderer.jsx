@@ -77,6 +77,24 @@ export function ContentRenderer({ bloques }) {
                 ))}
               </ul>
             );
+          case 'callout':
+            return (
+              <div
+                key={index}
+                className="flex gap-3 items-start bg-blue-50 border-l-4 border-acento rounded-r-xl px-4 py-3 my-2 shadow-sm"
+                role="note"
+                aria-label="Dato curioso"
+              >
+                {bloque.icono && (
+                  <span className="text-2xl leading-snug flex-shrink-0" aria-hidden="true">
+                    {bloque.icono}
+                  </span>
+                )}
+                <p className="text-blue-900 leading-relaxed text-base sm:text-lg font-medium">
+                  {renderText(bloque.texto)}
+                </p>
+              </div>
+            );
           default:
             return null;
         }
