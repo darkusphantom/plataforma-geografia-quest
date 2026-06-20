@@ -3,16 +3,18 @@
 Este documento contiene el contexto completo de la arquitectura, decisiones de diseño y estado actual de la "Plataforma Educativa de Geografía" para facilitar la continuación del desarrollo por parte de otra Inteligencia Artificial.
 
 ## 1. OBJETIVO DEL PROYECTO
-Construir una plataforma web educativa SPA (Single Page Application) sin backend, orientada a niños de 13-14 años, diseñada bajo la estrategia "Mobile-First" y utilizando React + Vite + Tailwind CSS. 
+Construir una plataforma web educativa SPA (Single Page Application) orientada a niños de 13-14 años, diseñada bajo la estrategia "Mobile-First" y utilizando React + Vite + Tailwind CSS. Actualmente integra un sistema de autenticación de usuarios y sincronización de progreso contra una base de datos de Notion.
 
 ## 2. ARQUITECTURA Y ESTRUCTURA DE ARCHIVOS
-La aplicación se rige por un esquema centralizado de datos (`data.json`) que alimenta componentes funcionales altamente desacoplados.
+La aplicación se rige por un esquema de datos local (`data.json`) para el contenido, pero interactúa de forma asíncrona con un backend serverless (Notion API) para guardar el estado y progreso de los alumnos.
 
 ```text
 src/
-├── app/                  # (Reservado para futuros layouts de enrutamiento)
+├── admin/                # Vistas y componentes para el Panel de Administración (Docentes)
+├── auth/                 # Vistas para el Login y Registro de estudiantes
 ├── components/           # Componentes visuales y lógicos
 │   ├── ContentRenderer.jsx # Itera sobre bloques JSON y renderiza HTML + Tooltips
+│   ├── CrosswordActivity.jsx# Actividad: Crucigrama interactivo
 │   ├── FreeTextActivity.jsx# Actividad: Respuesta Libre
 │   ├── GlossaryTooltip.jsx # Componente visual interactivo (Hover/Click) para definiciones
 │   ├── MatchingActivity.jsx# Actividad: Relacionar opciones con select
@@ -20,50 +22,38 @@ src/
 │   ├── ModuleList.jsx      # Contenedor de las tarjetas
 │   ├── ProgressBar.jsx     # UI de progreso general del estudiante
 │   ├── ScoreCard.jsx       # UI de calificación final mostrada al terminar actividad
-│   └── TrueFalseActivity.jsx# Actividad: Verdadero/Falso
+│   ├── TrueFalseActivity.jsx# Actividad: Verdadero/Falso
+│   └── WordSearchActivity.jsx# Actividad: Sopa de Letras
 ├── data/
 │   └── data.json           # LA FUENTE DE LA VERDAD (Glosario, Módulos, Contenido, Preguntas)
 ├── hooks/
-│   ├── useGlossary.jsx     # (Opcional/Legacy) Lógica de parseo del glosario
-│   └── useProgress.jsx     # Interfaz con localStorage ('geografia_progreso')
+│   ├── useAuth.ts          # Hook para gestión de sesión (Estudiante / Admin)
+│   ├── useGlossary.jsx     # Lógica de parseo del glosario
+│   ├── useNotionProgress.ts# Hook para guardar/leer progreso de la DB en Notion
+│   └── useProgress.jsx     # (Legacy) Gestión local
 ├── utils/
 │   ├── evaluation.js       # Contiene 'evaluarRespuesta' (case-insensitive, ignora acentos)
 │   └── feedback.js         # Contiene 'getFeedback' (puntaje -> Emoji + Colores)
-├── App.jsx               # Layout Principal (Header, Sidebar responsivo, Main area)
+├── App.jsx               # Layout Principal con rutas protegidas
 ├── index.css             # Directivas de Tailwind y estilos base
 └── main.jsx              # Punto de entrada de React
 ```
 
 ## 3. FUENTE DE DATOS (`data.json`)
-Es el motor de la aplicación. Todo texto con la etiqueta `<glossary>palabra</glossary>` es interpretado en tiempo de ejecución por `ContentRenderer.jsx`, que busca esa "palabra" en el array `glossario` del mismo JSON y la reemplaza por un componente `GlossaryTooltip`.
-
+Es el motor del contenido de la aplicación. Todo texto con la etiqueta `<glossary>palabra</glossary>` es interpretado en tiempo de ejecución por `ContentRenderer.jsx`.
 Estructura de un Módulo:
 - `id`, `numero`, `titulo`, `descripcion`
 - `contenido.bloques`: Array de objetos que dictan el renderizado (`titulo-seccion`, `parrafo`, `lista`, etc).
-- `actividad`: Objeto que define el tipo de evaluación al final del contenido (`respuesta-libre`, `verdadero-falso`, `matching`).
+- `actividad`: Define el tipo de evaluación al final (`respuesta-libre`, `verdadero-falso`, `matching`, `word-search`, `crossword`).
 
-## 4. SISTEMA DE PROGRESO Y ESTADO
-- **Almacenamiento**: No hay base de datos. Se usa `localStorage` bajo la llave `geografia_progreso`.
-- **Estructura Guardada**:
-  ```json
-  {
-    "1-tectonica-placas": {
-      "act-tectonica-1": {
-        "respuestas": { "tec-q1": "alfred wegener" },
-        "calificacion": 100
-      }
-    }
-  }
-  ```
-- **Flujo**:
-  1. `App.jsx` carga el progreso inicial vía `useProgress()`.
-  2. Pasa `savedProgress` como prop a las actividades.
-  3. Si la actividad ya fue completada, inicializa los estados y muestra el `ScoreCard` directamente.
-  4. Al pulsar "Siguiente Módulo", `App.jsx` calcula el siguiente ID y renderiza el nuevo contenido.
+## 4. SISTEMA DE PROGRESO, AUTENTICACIÓN Y ESTADO
+- **Autenticación**: Existe un sistema de Login/Registro donde el usuario ingresa su Cédula y Contraseña. Hay un acceso especial para el perfil Administrador.
+- **Almacenamiento y Sincronización**: El progreso se almacena localmente usando `localStorage` (separado por ID de estudiante) y se **sincroniza en segundo plano con Notion**.
+- **Panel Administrativo**: Los docentes pueden ver el progreso de los alumnos, revisar respuestas exactas, filtrar por módulo o alumno y exportar los datos a CSV o JSON.
 
 ## 5. REGLAS DE DISEÑO (TAILWIND CSS)
 - **Mobile-first**: Clases base para móvil, clases prefijadas con `md:` o `sm:` para desktop.
-- **Sidebar**: En móvil es un menú "Off-canvas" (Slide over) oculto mediante clases de transición (`-translate-x-full`); en escritorio (`md:relative md:translate-x-0`) permanece fijo a la izquierda.
+- **Sidebar responsivo**: Menú "Off-canvas" en móvil, estático a la izquierda en escritorio.
 - **Colores (definidos en `tailwind.config.js`)**:
   - `fondo`: Blanco
   - `textoBase`: Gris oscuro
@@ -76,10 +66,6 @@ Estructura de un Módulo:
 `evaluarRespuesta(userText, expectedArray)` en `utils/evaluation.js`:
 - Normaliza todo el texto (`.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")`) eliminando mayúsculas y tildes.
 - Evalúa si alguna cadena del `expectedArray` está *incluida* en `userText`.
-- Ejemplo: Si el array espera "wegener", la respuesta de usuario "creo que fue el cientifico wegener" es `true`.
 
-## 7. QUÉ HACER A CONTINUACIÓN (PENDIENTES)
-La aplicación es 100% funcional según el MVP requerido. Si deseas expandirla, podrías:
-1. Agregar nuevos módulos en `data.json` agregando actividades como "crucigrama" o "identificación visual".
-2. Mejorar accesibilidad añadiendo etiquetas `aria-` completas.
-3. Permitir descargar el progreso del usuario en un archivo PDF o JSON.
+## 7. ESTADO ACTUAL
+La aplicación es funcional, con un sistema de autenticación completo, progreso sincronizado en la nube (Notion API), un panel administrativo avanzado para docentes, y 5 tipos de actividades interactivas (Respuesta libre, Verdadero/Falso, Relacionar conceptos, Sopa de letras y Crucigrama).

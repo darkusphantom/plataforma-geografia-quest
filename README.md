@@ -27,11 +27,11 @@ Plataforma web educativa interactiva basada en el modelo CDAVA (Medina, 2005) pa
 2. Abre una terminal en la carpeta del proyecto (`plataforma-geografia`).
 3. Instala las dependencias:
    ```bash
-   npm install
+   pnpm install
    ```
 4. Inicia el servidor de desarrollo:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 5. Abre tu navegador en la URL indicada (usualmente `http://localhost:5173`).
 

@@ -14,6 +14,7 @@ Plataforma web educativa interactiva orientada a estudiantes de primer año de e
   - **Verdadero o Falso**: Actividades clásicas de selección binaria.
   - **Matching (Relacionar Conceptos)**: Seleccionar la opción correcta que corresponde a un concepto específico.
   - **Sopa de Letras (Word Search)**: Actividad interactiva para encontrar palabras clave en una cuadrícula generada dinámicamente.
+  - **Crucigrama (Crossword)**: Actividad interactiva estilo crucigrama con validación de celdas.
 - **Sistema de Calificación Dual**: Asigna puntuaciones del 0 al 100 y ofrece retroalimentación visual con emojis y colores (✅ Éxito, 😊 Regular, ❌ Error).
 - **Sistema de Autenticación**: Gestión de sesiones de estudiantes y administradores, asegurando acceso protegido y personalizado.
 - **Persistencia y Sincronización de Datos**: Guarda el avance del estudiante en el `localStorage` aislado mediante namespacing (`ID de usuario`) para evitar cruce de datos en equipos compartidos, y sincroniza el progreso en background con una base de datos en Notion.
@@ -32,6 +33,7 @@ La arquitectura se basa en componentes funcionales desacoplados que consumen dat
 src/
 ├── components/           # Componentes modulares de React
 │   ├── ContentRenderer.jsx # Itera bloques JSON y renderiza HTML y tooltips del glosario
+│   ├── CrosswordActivity.jsx# Maneja la actividad de crucigrama
 │   ├── FreeTextActivity.jsx# Maneja las actividades de respuesta libre
 │   ├── GlossaryTooltip.jsx # Renderiza el tooltip interactivo para el glosario
 │   ├── MatchingActivity.jsx# Maneja las actividades de relacionar conceptos
