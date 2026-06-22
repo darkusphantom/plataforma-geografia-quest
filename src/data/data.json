@@ -317,7 +317,7 @@
               "palabra": "CONO",
               "pista": "Estructura acumulada del volcán.",
               "fila": 6,
-              "col": 4,
+              "col": 1,
               "direccion": "abajo"
             },
             {
@@ -325,15 +325,15 @@
               "palabra": "FOCO",
               "pista": "Centro de origen del magma (horizontal).",
               "fila": 9,
-              "col": 4,
+              "col": 0,
               "direccion": "derecha"
             },
             {
               "id": "5v",
               "palabra": "LAVA",
               "pista": "Magma que sale al exterior por el volcán (vertical).",
-              "fila": 6,
-              "col": 7,
+              "fila": 2,
+              "col": 9,
               "direccion": "abajo"
             }
           ]
