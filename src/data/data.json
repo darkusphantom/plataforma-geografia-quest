@@ -25,17 +25,17 @@
     {
       "id": "magma",
       "termino": "Magma",
-      "definicion": "Materia ígnea en estado fluido en el interior de la Tierra."
+      "definicion": "Es mucho más que roca derretida; es una mezcla subterránea de líquidos, gases a presión y cristales a temperaturas extremas."
     },
     {
       "id": "volcan",
       "termino": "Volcán",
-      "definicion": "Conducto natural que pone en contacto el exterior con depósitos de magma subterráneo."
+      "definicion": "Válvula de escape de la tierra. Son estructuras geológicas fascinantes capaces de crear nuevas islas, alterar el clima y albergar fluidos más calientes que la lava convencional."
     },
     {
       "id": "atmosfera",
       "termino": "Atmósfera",
-      "definicion": "Capa de gases que envuelve a un cuerpo celeste (como la Tierra) y se mantiene unida a él gracias a la fuerza de gravedad."
+      "definicion": "Es una fina capa de gases que protege y da vida a la tierra."
     },
     {
       "id": "evaporacion",
@@ -55,27 +55,17 @@
     {
       "id": "rio",
       "termino": "Río",
-      "definicion": "Corriente permanente y continua de agua que se desplaza sobre la superficie terrestre."
+      "definicion": "Venezuela alberga el río más corto del mundo, el Mapurite, con apenas 13 metros de longitud, mientras que el Amazonas es tan ancho y caudaloso que jamás ha sido cruzado por un puente."
     },
     {
       "id": "caudal",
       "termino": "Caudal",
-      "definicion": "Cantidad de agua que pasa por un punto dado del cauce en una unidad de tiempo."
+      "definicion": "Es la cantidad de fluido (agua, gas, petróleo, etc) que pasa a través de un área o sección específica en un periodo de tiempo determinado."
     },
     {
       "id": "desembocadura",
       "termino": "Desembocadura",
       "definicion": "Lugar donde un río desagua en otro río, lago, océano o mar."
-    },
-    {
-      "id": "clima",
-      "termino": "Clima",
-      "definicion": "Estado promedio de las condiciones atmosféricas en un lugar específico, calculado a lo largo de largos períodos, generalmente de 20 a 30 años."
-    },
-    {
-      "id": "tiempo",
-      "termino": "Tiempo",
-      "definicion": "Se determina mediante el análisis de variables como temperatura, humedad, presión, viento y precipitaciones."
     },
     {
       "id": "tectonicos",
@@ -202,7 +192,7 @@
           },
           {
             "tipo": "parrafo",
-            "texto": "Un <glossary>volcán</glossary> es un conducto natural que pone en contacto el exterior con depósitos de <glossary>magma</glossary> subterráneo. El <glossary>magma</glossary> es materia ígnea en estado fluido que asciende hasta la superficie terrestre a través de una chimenea."
+            "texto": "Un <glossary>volcán</glossary> es un conducto natural que pone en contacto el exterior con depósitos de magma subterráneo. El <glossary>magma</glossary> es materia ígnea en estado fluido que asciende hasta la superficie terrestre a través de una chimenea."
           },
           {
             "tipo": "callout",
@@ -381,7 +371,7 @@
           },
           {
             "tipo": "parrafo",
-            "texto": "Es importante distinguir entre <glossary>tiempo</glossary> y <glossary>clima</glossary>. El tiempo es el estado actual de la atmósfera en un lugar y momento específico (puede cambiar de un día a otro). El clima es el conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo (años o décadas)."
+            "texto": "Es importante distinguir entre tiempo y clima. El tiempo es el estado actual de la atmósfera en un lugar y momento específico (puede cambiar de un día a otro). El clima es el conjunto de condiciones atmosféricas que caracterizan a una región durante largo tiempo (años o décadas)."
           },
           {
             "tipo": "callout",
@@ -571,10 +561,10 @@
           {
             "tipo": "lista",
             "items": [
-              "<glossary>Tectónicos</glossary>: se constituyen cuando la depresión es producto de una falla.",
-              "<glossary>Glaciares</glossary>: se generan cuando el agua ocupa las depresiones formadas por antiguos glaciares.",
-              "<glossary>Volcánicos</glossary>: se deben a la acumulación de agua de los cráteres de volcanes antiguos que cesaron su actividad.",
-              "<glossary>De barra</glossary>: se forman por la acumulación de sedimentos por deslizamientos de tierra, entre otras causas, que obstruyen el paso del agua de una corriente."
+              "<glossary>Tectónicos</glossary>",
+              "<glossary>Glaciares</glossary>",
+              "<glossary>Volcánicos</glossary>",
+              "<glossary>De barra</glossary>"
             ]
           },
           {
